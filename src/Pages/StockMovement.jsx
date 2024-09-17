@@ -6,7 +6,7 @@ import axios from "../axiosInterceptor";
 import withAuth from "../withAuth";
 import { FaEdit, FaEye} from "react-icons/fa";
 
-const Dashboard = () => {
+const StockMovement = () => {
   const navigate = useNavigate();
 
   const [books, setBooks] = useState([]);
@@ -27,31 +27,7 @@ const Dashboard = () => {
   }, []);
 
 
-//   const onDeleteBook = async (bookId) => {
-//     Swal.fire({
-//       title: "Are you sure?",
-//       text: "You won't be able to revert this!",
-//       icon: "warning",
-//       showCancelButton: true,
-//       confirmButtonColor: "#3085d6",
-//       cancelButtonColor: "#d33",
-//       confirmButtonText: "Yes, delete it!",
-//     }).then(async (result) => {
-//       if (result.isConfirmed) {
-//         try {
-//           await axios.delete(`api/books/${bookId}`);
-//           setBooks(books.filter((book) => book.id !== bookId));
-//           toast.success("Book Deleted Successfully");
-//         } catch (error) {
-//           toast.error("Error deleting book. Try again later.");
-//         }
-//       }
-//     });
-//   };
 
-//   const onEditBook = (bookId) => {
-//     navigate(`/edit-book/${bookId}`);
-//   };
 
   return (
     <section className="bg-[#edf0f0b9] h-screen">
@@ -144,5 +120,5 @@ const Dashboard = () => {
   );
 };
 
-export { Dashboard };
-export default withAuth(Dashboard);
+export { StockMovement };
+export default withAuth(StockMovement);
