@@ -1,7 +1,7 @@
-import  Navbar from './Navbar'
-import { Outlet } from "react-router-dom"
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import Navbar from "./Navbar";
+import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useState, useEffect, useRef } from "react";
 
 const Layout = () => {
@@ -11,14 +11,13 @@ const Layout = () => {
   });
   return (
     <>
-    <Navbar />
-     <div className={` ${role ? "ml-36" : ""}`}> 
-
-    <Outlet />
-    </div>
-    <ToastContainer />
+      <Navbar />
+      <div className={` ${role ? "ml-56" : ""}`}>
+        <Outlet />
+      </div>
+      <ToastContainer />
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
