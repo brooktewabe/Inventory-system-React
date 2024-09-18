@@ -69,6 +69,12 @@ const Navbar = () => {
       className: { linkClass },
     },
     {
+      icon: <AiOutlineUser size={25} className="mr-4" />,
+      text: "User Admin",
+      link: "/user-admin",
+      className: { linkClass },
+    },
+    {
       icon: <AiOutlineSwap size={25} className="mr-4" />,
       text: "Notifications",
       link: "/notification",

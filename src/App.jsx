@@ -21,6 +21,7 @@ import SalesHistory from "./Pages/SalesHistory";
 import ViewSaleDetail from "./Pages/ViewSaleDetail";
 import Notification from "./Pages/Notification";
 import Report from "./Pages/Report";
+import UserAdmin from "./Pages/UserAdmin";
 
 const App = () => {
   
@@ -46,6 +47,7 @@ const App = () => {
         <Route path='/dashboard' element={<Dashboard />}/>
         <Route path='/account/:id' element={<Account  />} loader={userLoader} />
         <Route path='/signup' element={<SignUp />} />
+        <Route path='/user-admin' element={<UserAdmin />} />
         <Route path='/login' element={<ValidatedLoginForm />} />
         <Route path='/changepassword/:id' element={<ChangePassword />} />
       </Route>
