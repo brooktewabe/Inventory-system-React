@@ -19,10 +19,11 @@ const Navbar = () => {
   const sidebarRef = useRef(null);
   const linkClass = ({ isActive }) => (isActive ? "text-[#3b82f6]" : "");
   const role = localStorage.getItem("role");
+  const jwt = Cookies.get('jwt');
   const location = useLocation();
   const navigate = useNavigate();
 
-  const adminMenu = [
+  const userMenu = [
     {
       icon: <BiSolidDashboard size={25} className="mr-4" />,
       text: "Dashboard",
@@ -30,20 +31,26 @@ const Navbar = () => {
       className: { linkClass },
     },
     {
-      icon: <CiViewList size={25} className="mr-4" />,
-      text: "Books",
-      link: "/books",
+      icon: <AiTwotonePlusCircle size={25} className="mr-4" />,
+      text: "Inventory",
+      link: "/inventory",
       className: { linkClass },
     },
     {
-      icon: <AiOutlineUser size={25} className="mr-4" />,
-      text: "Owners",
-      link: "/owners",
+      icon: <AiTwotoneReconciliation size={25} className="mr-4" />,
+      text: "Record Sales",
+      link: "/sales",
+      className: { linkClass },
+    },
+    {
+      icon: <AiOutlineBars size={25} className="mr-4" />,
+      text: "Report",
+      link: "/report",
       className: { linkClass },
     },
   ];
 
-  const userMenu = [
+  const adminMenu = [
     {
       icon: <BiSolidDashboard size={25} className="mr-4" />,
       text: "Dashboard",
@@ -84,11 +91,11 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/profile/logout", {
+      await axios.post("/api/logout", {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      Cookies.remove("userId");
+      // Cookies.remove("userId");
       Cookies.remove("jwt");
       localStorage.removeItem("role");
       navigate("/login", { replace: true });
@@ -113,7 +120,7 @@ const Navbar = () => {
   const storedId = Cookies.get("userId");
   const value = storedId ? `/account/${storedId}` : "/";
 
-  if (role !== "admin" && role !== "book_owner") {
+  if (role !== "admin" && role !== "user") {
     return null;
   }
 
@@ -122,7 +129,7 @@ const Navbar = () => {
       <div
         ref={sidebarRef}
         className={`fixed top-0 left-0 h-screen bg-[#06030b] z-50 duration-300 
-          ${nav ? "w-[90px]" : "w-[13%]"} flex flex-col justify-between`}
+          ${(nav) ? "w-[90px]" : "w-[13%]"} flex flex-col justify-between`}
       >
         <div className="bg-[#06030b] rounded-t-xl p-4 flex flex-col">
           {!nav && (
@@ -155,7 +162,7 @@ const Navbar = () => {
 
         <nav className="flex-1">
           <ul className="flex flex-col p-4 text-white">
-            {role === "book_owner" &&
+            {role === "user" &&
               userMenu.map(({ icon, text, link }, index) => (
                 <li key={index} className="my-2">
                   <NavLink

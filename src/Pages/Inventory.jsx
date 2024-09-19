@@ -6,105 +6,79 @@ import axios from "../axiosInterceptor";
 import withAuth from "../withAuth";
 import { FaEdit, FaTrash, FaSearch, FaFilter, FaPlus } from "react-icons/fa";
 import { AiOutlineHourglass } from "react-icons/ai";
-import Chart from "../Components/Chart";
-import AreaChart from "../Components/AreaChart";
-import IncomeSection from "../Components/Income";
 
-const Dashboard = () => {
+
+const Inventory = () => {
   const navigate = useNavigate();
-  const role = localStorage.getItem("role");
-  const [time, setTime] = useState(new Date());
 
-  const [books, setBooks] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const [searchVisible, setSearchVisible] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [filteredStocks, setFilteredStocks] = useState([]);
+
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (date) => {
-    const options = {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour12: true,
-    };
-    return (
-      date.toLocaleDateString("en-US", options) +
-      ", " +
-      date.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      })
-    );
-  };
-
-  useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchStocks = async () => {
       try {
-        const response = await axios.get("api/books");
-        setBooks(response.data);
-        setFilteredBooks(response.data);
+        const response = await axios.get("api/stock");
+        setStocks(response.data.data);
+        setFilteredStocks(response.data.data);
       } catch (error) {
-        console.error("Error fetching books:", error);
+        console.error("Error fetching :", error);
       }
     };
 
-    fetchBooks();
+    fetchStocks();
   }, []);
 
   useEffect(() => {
-    let updatedBooks = books;
+    let updatedStocks = stocks;
 
     if (searchTerm) {
-      updatedBooks = updatedBooks.filter((book) =>
-        book.bookName.toLowerCase().includes(searchTerm.toLowerCase())
+      updatedStocks = updatedStocks.filter((stock) =>
+        stock.Name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (filterStatus) {
-      updatedBooks = updatedBooks.filter(
-        (book) => book.status === filterStatus
+      updatedStocks = updatedStocks.filter(
+        (stock) => stock.Category === filterStatus
       );
     }
 
-    setFilteredBooks(updatedBooks);
-  }, [searchTerm, filterStatus, books]);
+    setFilteredStocks(updatedStocks);
+  }, [searchTerm, filterStatus, stocks]);
 
-  const onDeleteBook = async (bookId) => {
+  const onDelete = async (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
+      text: "Are you sure you want to delete this product?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "Cancel",
+      customClass: {
+        cancelButton: "border border-gray-700 px-6 py-2 w-32 rounded-3xl ",
+        confirmButton: "bg-red-500 text-white px-6 py-2 w-32 rounded-3xl",
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`api/books/${bookId}`);
-          setBooks(books.filter((book) => book.id !== bookId));
-          toast.success("Book Deleted Successfully");
+          await axios.delete(`api/stock/${id}`);
+          setStocks(stocks.filter((stock) => stock.id !== id));
+          toast.success("Deleted Successfully");
         } catch (error) {
-          toast.error("Error deleting book. Try again later.");
+          toast.error("Error deleting stock. Try again later.");
         }
       }
     });
   };
+  
 
-  const onEditBook = (bookId) => {
-    navigate(`/edit-book/${bookId}`);
+  const onEditStock = (id) => {
+    navigate(`/edit-product/${id}`);
   };
   const handleAddNavigation = () => {
     navigate("/add-product");
@@ -148,7 +122,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Live Book Status full-width grid */}
+          {/*full-width grid */}
           <div className="bg-white p-6 rounded-lg shadow-md ml-6 ">
             <div className="flex justify-between items-center mb-6">
               <h3 className=" text-lg font-bold">Stock List</h3>
@@ -170,7 +144,7 @@ const Dashboard = () => {
             {searchVisible && (
               <input
                 type="text"
-                placeholder="Search by book name"
+                placeholder="Search by name"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full mb-4 p-2 border border-gray-300 rounded"
@@ -218,37 +192,35 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredBooks.map((book) => (
-                  <tr key={book.id}>
-                    <td className="py-2 px-4 border-b">{book.bookId}</td>
+                {filteredStocks.map((stock, index) => (
+                  <tr key={stock.id}>
+                    <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">
-                    {book.author}
+                    {stock.Name}
                     </td>
                     <td className="py-2 px-4 border-b">
-                    {book.author}
+                    {stock.Category}
                     </td>
                     <td className="py-2 px-4 border-b">
-                    {book.author}
+                    {stock.Curent_stock}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                    {stock.Reorder_level}
                     </td>
                     
                     <td className="py-2 px-4 border-b">
-                      <div className="flex items-center">
-                        {book.status === "Active" ? "Free" : "Rented"}
-                      </div>
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {book.rentPrice} Birr
+                      {stock.Location}
                     </td>
 
                       <td className="py-3 px-4 border-b space-x-2">
                         <button
-                          onClick={() => onEditBook(book.id)}
+                          onClick={() => onEditStock(stock.id)}
                           className="text-blue-500 hover:text-blue-700"
                         >
                           <FaEdit />
                         </button>
                         <button
-                          onClick={() => onDeleteBook(book.id)}
+                          onClick={() => onDelete(stock.id)}
                           className="text-red-500 hover:text-red-700"
                         >
                           <FaTrash />
@@ -265,5 +237,5 @@ const Dashboard = () => {
   );
 };
 
-export { Dashboard };
-export default withAuth(Dashboard);
+export { Inventory };
+export default withAuth(Inventory);
