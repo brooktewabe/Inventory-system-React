@@ -6,6 +6,7 @@ import { useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import { BiSolidDashboard } from "react-icons/bi";
 import Cookies from "js-cookie";
 import axios from "../axiosInterceptor";
+import { useParams } from "react-router-dom";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
@@ -16,12 +17,27 @@ const Navbar = () => {
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [user, setUser] = useState("");
   const sidebarRef = useRef(null);
   const linkClass = ({ isActive }) => (isActive ? "text-[#3b82f6]" : "");
   const role = localStorage.getItem("role");
-  const jwt = Cookies.get('jwt');
+  const uid = localStorage.getItem("uid");
   const location = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams();
+
+
+  useEffect(() => {
+    const fetchInfo= async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/user/${uid}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      }
+    };
+    fetchInfo();
+  }, [id]);
 
   const userMenu = [
     {
@@ -98,6 +114,7 @@ const Navbar = () => {
       // Cookies.remove("userId");
       Cookies.remove("jwt");
       localStorage.removeItem("role");
+      localStorage.removeItem("uid");
       navigate("/login", { replace: true });
       window.location.reload();
     } catch (error) {
@@ -117,8 +134,6 @@ const Navbar = () => {
     setNav(JSON.parse(localStorage.getItem("navCollapsed") || "false"));
   }, [location]);
 
-  const storedId = Cookies.get("userId");
-  const value = storedId ? `/account/${storedId}` : "/";
 
   if (role !== "admin" && role !== "user") {
     return null;
@@ -145,8 +160,8 @@ const Navbar = () => {
               <div className="text-white bg-black rounded-3xl flex items-center p-2 mt-8">
                 <AiOutlineUser size={25} className="mr-4" />
                 <div>
-                  <h3 className="text-white">Samuel Nigussie</h3>
-                  <h3 className="text-neutral-800">Data clerk</h3>
+                  <h3 className="text-white">{user.fname+" " +user.lname}</h3>
+                  <h3 className="text-neutral-800">{role}</h3>
                 </div>
               </div>
             </>
