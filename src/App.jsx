@@ -3,13 +3,10 @@ import HomePage from "./Pages/HomePage";
 import Layout from "./Components/Layout";
 import NotFoundPage from "./Pages/NotFoundPage";
 import Account, { userLoader } from "./Pages/Account";
-import SignUp from "./Pages/SignUp";
 import ValidatedLoginForm from "./Pages/Login";
 import ChangePassword from "./Pages/ChangePassword";
 import Dashboard from "./Pages/Dashboard"
-import Books from './Pages/Books'
 import Owners from './Pages/Owners'
-import AddBook from './Pages/AddBook'
 import EditProduct from './Pages/EditProduct'
 import Inventory from "./Pages/Inventory";
 import AddProduct from "./Pages/AddProduct";
@@ -39,14 +36,11 @@ const App = () => {
         <Route path='/sales-detail/:id' element={<ViewSaleDetail/>}/>
         <Route path='/add-product' element={<AddProduct/>}/>
         <Route path='*' element={<NotFoundPage />} />
-        <Route path='/add-book' element={<AddBook />} />
         <Route path='/edit-product/:id' element={<EditProduct />} />
         <Route path='/record-sale/:id' element={<RecordSale />} />
-        <Route path='/books' element={<Books />} />
         <Route path='/owners' element={<Owners />} />
         <Route path='/dashboard' element={<Dashboard />}/>
         <Route path='/account/:id' element={<Account  />} loader={userLoader} />
-        <Route path='/signup' element={<SignUp />} />
         <Route path='/user-admin' element={<UserAdmin />} />
         <Route path='/login' element={<ValidatedLoginForm />} />
         <Route path='/changepassword/:id' element={<ChangePassword />} />
