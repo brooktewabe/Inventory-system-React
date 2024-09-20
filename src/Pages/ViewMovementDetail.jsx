@@ -38,7 +38,7 @@ const ViewMovementDetail = () => {
             <h3 className="text-xl font-bold">Stock Movement - Details</h3>
           </div>
 
-          {/* Live Book Status full-width grid */}
+          {/* full-width grid */}
           <div className="bg-white p-6 rounded-lg shadow-md ml-40 max-w-2xl">
             <div className="ml-6 mb-6">
               <h3 className="text-lg font-bold mb-4">Stock Movement</h3>

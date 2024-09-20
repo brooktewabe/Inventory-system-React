@@ -7,28 +7,28 @@ import { useNavigate} from "react-router-dom";
 
 const ViewSaleDetail = () => {
   const { id } = useParams();
-  const [book, setBook] = useState(null);
+  const [sale, setSale] = useState(null);
   const navigate = useNavigate();
   const handleReturn = async () => {
     try {
       navigate("/");
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error("error:", error);
     }
   };
   useEffect(() => {
-    const fetchBook = async () => {
+    const fetchSale = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/books/${id}`);
-        setBook(response.data);
+        const response = await axios.get(`http://localhost:5000/sales/${id}`);
+        setSale(response.data);
       } catch (error) {
-        console.error("Error fetching book details:", error);
+        console.error("Error fetching  details:", error);
       }
     };
-    fetchBook();
+    fetchSale();
   }, [id]);
 
-  if (!book) return <p>Loading...</p>;
+  if (!sale) return <p>Loading...</p>;
 
   return (
     <section className="bg-[#edf0f0b9] h-screen">
@@ -39,7 +39,7 @@ const ViewSaleDetail = () => {
             <h3 className="text-xl font-bold">Sales History - Details</h3>
           </div>
 
-          {/* Live Book Status full-width grid */}
+          {/*full-width grid */}
           <div className="bg-white p-6 rounded-lg shadow-md ml-40 max-w-2xl">
             <div className="ml-16 mb-6">
               <div className="flex flex-col items-center">
@@ -50,33 +50,33 @@ const ViewSaleDetail = () => {
               <h3 className=" font-bold mb-4">Buyer Information</h3>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Full Name:</strong>
-                  <span>{book.author}</span>
+                  <span>{sale.Full_name}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Phone Number:</strong>
-                  <span >{book.author}</span>
+                  <span >{sale.Contact}</span>
                 </div>
                <br /> <hr className="mb-4" />
                 <h3 className=" font-bold mb-4">Order Information</h3>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Product Title</strong>
-                  <span>{book.author}</span>
+                  <span>{sale.author}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Product ID</strong>
-                  <span>{book.author}</span>
+                  <span>{sale.author}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Price</strong>
-                  <span>{book.author}</span>
+                  <span>{sale.Amount}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Payment Method</strong>
-                  <span>{book.author}</span>
+                  <span>{sale.Payment_method}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Credit</strong>
-                  <span>{book.author}</span>
+                  <span>{sale.Credit}</span>
                 </div>
               </div>
               <button

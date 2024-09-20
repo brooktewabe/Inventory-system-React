@@ -31,6 +31,7 @@ const ValidatedLoginForm = () => {
       Cookies.set("jwt", response.data.jwt, { expires: 1 });
       // Cookies.set("userId", response.data.profileId, { expires: 1 });
       localStorage.setItem("role", response.data.role);
+      localStorage.setItem("uid", response.data.id);
 
       setEmail("");
       setPassword("");
