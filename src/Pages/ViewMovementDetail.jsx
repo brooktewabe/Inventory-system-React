@@ -6,7 +6,7 @@ import { useNavigate} from "react-router-dom";
 
 const ViewMovementDetail = () => {
   const { id } = useParams();
-  const [book, setBook] = useState(null);
+  const [movement, setMovement] = useState(null);
   const navigate = useNavigate();
   const handleReturn = async () => {
     try {
@@ -16,18 +16,18 @@ const ViewMovementDetail = () => {
     }
   };
   useEffect(() => {
-    const fetchBook = async () => {
+    const fetchMovement= async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/books/${id}`);
-        setBook(response.data);
+        const response = await axios.get(`http://localhost:5000/movement/${id}`);
+        setMovement(response.data);
       } catch (error) {
-        console.error("Error fetching book details:", error);
+        console.error("Error fetching details:", error);
       }
     };
-    fetchBook();
+    fetchMovement();
   }, [id]);
 
-  if (!book) return <p>Loading...</p>;
+  if (!movement) return <p>Loading...</p>;
 
   return (
     <section className="bg-[#edf0f0b9] h-screen">
@@ -46,19 +46,19 @@ const ViewMovementDetail = () => {
 
                 <div className="flex items-center">
                   <strong className="w-40">Author:</strong>
-                  <span className="text-[#8f8d8d]">{book.author}</span>
+                  <span className="text-[#8f8d8d]">{movement.User}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-40">Change Mode:</strong>
-                  <span className="text-[#8f8d8d]">{book.author}</span>
+                  <span className="text-[#8f8d8d]">{movement.Mode}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-40">Date:</strong>
-                  <span className="text-[#8f8d8d]">{book.author}</span>
+                  <span className="text-[#8f8d8d]">{movement.Date}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-40">Reason:</strong>
-                  <span className="text-[#8f8d8d]">{book.author}</span>
+                  <span className="text-[#8f8d8d]">{movement.Reason}</span>
                 </div>
               </div>
               <br />

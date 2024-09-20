@@ -62,6 +62,9 @@ const StockMovement = () => {
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     User
                   </td>
+                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                    Action
+                  </td>
                 </tr>
               </thead>
               <tbody>
@@ -84,6 +87,15 @@ const StockMovement = () => {
                     <td className="py-2 px-4 border-b">
                       <div className="flex items-center">
                         {movement.User}
+                      </div>
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      <div className="flex items-center">
+                      <button
+                            onClick={() => navigate(`/movement-detail/${movement.id}`)}
+                        >
+                          <FaEye />
+                        </button>
                       </div>
                     </td>
                   </tr>
