@@ -195,7 +195,7 @@ const Navbar = () => {
                 <li key={index} className="my-4">
                   <NavLink
                     to={link}
-                    className="flex items-center text-xl hover:bg-[#424243] rounded-lg p-2"
+                    className="flex items-center text-lg hover:bg-[#424243] rounded-lg p-2"
                     onClick={() => setNav(false)}
                   >
                     {icon}
