@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { AiOutlineUser, AiFillLock, AiFillSecurityScan } from "react-icons/ai";
+import { AiOutlineUser,AiFillSecurityScan } from "react-icons/ai";
 
 const ValidatedLoginForm = () => {
   const [email, setEmail] = useState("");
@@ -23,13 +23,13 @@ const ValidatedLoginForm = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/profile/login", {
+      const response = await axios.post("http://localhost:5000/login", {
         email,
         password,
       });
 
       Cookies.set("jwt", response.data.jwt, { expires: 1 });
-      Cookies.set("userId", response.data.profileId, { expires: 1 });
+      // Cookies.set("userId", response.data.profileId, { expires: 1 });
       localStorage.setItem("role", response.data.role);
 
       setEmail("");

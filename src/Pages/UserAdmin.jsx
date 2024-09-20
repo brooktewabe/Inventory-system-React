@@ -11,18 +11,18 @@ import Swal from "sweetalert2";
 import UnauthorizedAccess from "../Components/UnauthorizedAccess";
 
 const UserAdmin = () => {
-  const navigate = useNavigate();
 
-  const [books, setBooks] = useState([]);
+  const [users, setUsers] = useState([]);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("book_owner");
+  const [role, setRole] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const currentRole = localStorage.getItem("role");
 
   const [errors, setErrors] = useState({});
@@ -34,10 +34,12 @@ const UserAdmin = () => {
     }
 
     try {
-      await fetch("/api/profile/signup", {
+      await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          fname,
+          lname,
           email,
           password,
           role,
@@ -48,7 +50,7 @@ const UserAdmin = () => {
       if (error.response && error.response.status === 409) {
         toast.error("Email already in use");
       } else {
-        toast.error("Failed to sign up. Please try again later.");
+        toast.error("Failed to add. Please try again later.");
       }
       console.error(error);
     }
@@ -63,14 +65,11 @@ const UserAdmin = () => {
       password: Yup.string()
         .required("Password is required")
         .min(8, "Password must be at least 8 characters"),
-      confirmPassword: Yup.string()
-        .oneOf([password], "Passwords must match")
-        .required("Confirm Password is required"),
     });
 
     try {
       schema.validateSync(
-        { email, password, confirmPassword },
+        { email, password, fname, lname },
         { abortEarly: false }
       );
       setErrors({});
@@ -85,30 +84,30 @@ const UserAdmin = () => {
     }
   };
   useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchUsers = async () => {
       try {
-        const response = await axios.get("api/books");
-        setBooks(response.data);
-        setFilteredBooks(response.data);
+        const response = await axios.get("api/users");
+        setUsers(response.data);
+        setFilteredUsers(response.data);
       } catch (error) {
-        console.error("Error fetching books:", error);
+        console.error("Error fetching users:", error);
       }
     };
 
-    fetchBooks();
+    fetchUsers();
   }, []);
 
   useEffect(() => {
-    let updatedBooks = books;
+    let updatedUsers = users;
 
     if (searchTerm) {
-      updatedBooks = updatedBooks.filter((book) =>
-        book.bookName.toLowerCase().includes(searchTerm.toLowerCase())
+      updatedUsers = updatedUsers.filter((user) =>
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-  }, [searchTerm, books]);
+  }, [searchTerm, users]);
 
-  const onDeleteBook = async (bookId) => {
+  const onDeleteUser = async (id) => {
     Swal.fire({
       text: "Are you sure you want to delete this user?",
       icon: "error",
@@ -123,11 +122,11 @@ const UserAdmin = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`api/books/${bookId}`);
-          setBooks(books.filter((book) => book.id !== bookId));
+          await axios.delete(`api/user/${id}`);
+          setUsers(users.filter((user) => user.id !== id));
           toast.success("Deleted Successfully");
         } catch (error) {
-          toast.error("Error deleting book. Try again later.");
+          toast.error("Error deleting. Try again later.");
         }
       }
     });
@@ -160,8 +159,8 @@ const UserAdmin = () => {
                           name="fname"
                           type="text"
                           placeholder="Enter first name"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          value={fname}
+                          onChange={(e) => setFname(e.target.value)}
                           className={`shadow appearance-none  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline ${
                             errors.fname ? "border-red-500" : ""
                           }`}
@@ -185,8 +184,8 @@ const UserAdmin = () => {
                           name="lname"
                           type="text"
                           placeholder="Enter last name"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          value={lname}
+                          onChange={(e) => setLname(e.target.value)}
                           className={`shadow appearance-none  rounded w-full py-2 px-3   leading-tight focus:outline-none focus:shadow-outline ${
                             errors.email ? "border-red-500" : ""
                           }`}
@@ -268,7 +267,7 @@ const UserAdmin = () => {
             </div>
           </div>
 
-          {/* Live Book Status full-width grid */}
+          {/* full-width grid */}
           <div className="bg-white p-6 rounded-lg shadow-md ml-20 mr-40 ">
             <div className="flex justify-between items-center mb-6">
               <h3 className=" text-lg font-bold">Users List</h3>
@@ -307,14 +306,14 @@ const UserAdmin = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredBooks.map((book) => (
-                  <tr key={book.id}>
-                    <td className="py-2 px-4 border-b">{book.bookId}</td>
-                    <td className="py-2 px-4 border-b">{book.author}</td>
+                {filteredUsers.map((user,index) => (
+                  <tr key={user.id}>
+                    <td className="py-2 px-4 border-b">{index + 1}</td>
+                    <td className="py-2 px-4 border-b">{user.email}</td>
 
                     <td className="py-3 px-4 border-b space-x-2">
                       <button
-                        onClick={() => onDeleteBook(book.id)}
+                        onClick={() => onDeleteUser(user.id)}
                         className="text-red-500 hover:text-red-700"
                       >
                         <FaTrash />
