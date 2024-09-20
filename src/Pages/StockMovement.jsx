@@ -1,32 +1,28 @@
 import { useState, useEffect } from "react";
-import Swal from "sweetalert2";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "../axiosInterceptor";
 import withAuth from "../withAuth";
-import { FaEdit, FaEye} from "react-icons/fa";
+import { FaEye} from "react-icons/fa";
 
 const StockMovement = () => {
   const navigate = useNavigate();
 
-  const [books, setBooks] = useState([]);
-  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [movements, setMovements] = useState([]);
+  const [filteredMovements, setFilteredMovements] = useState([]);
 
   useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchMovements = async () => {
       try {
-        const response = await axios.get("api/books");
-        setBooks(response.data);
-        setFilteredBooks(response.data);
+        const response = await axios.get("api/movement");
+        setMovements(response.data.data);
+        setFilteredMovements(response.data.data);
       } catch (error) {
-        console.error("Error fetching books:", error);
+        console.error("Error fetching Movements:", error);
       }
     };
 
-    fetchBooks();
+    fetchMovements();
   }, []);
-
-
 
 
   return (
@@ -38,7 +34,7 @@ const StockMovement = () => {
             <h3 className="text-xl font-bold">Stock Movement</h3>
           </div>
 
-          {/* Live Book Status full-width grid */}
+          {/* full-width grid */}
           <div className="bg-white p-6 rounded-lg shadow-md ml-6 ">
           <div className="flex justify-between items-center mb-6">
           <h3 className=" text-lg font-bold">Stock Movement</h3>
@@ -66,49 +62,30 @@ const StockMovement = () => {
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     User
                   </td>
-                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
-                      Action
-                    </td>
                 </tr>
               </thead>
               <tbody>
-                {filteredBooks.map((book) => (
-                  <tr key={book.id}>
-                    <td className="py-2 px-4 border-b">{book.bookId}</td>
+                {filteredMovements.map((movement,index) => (
+                  <tr key={movement.id}>
+                    <td className="py-2 px-4 border-b">{}</td>
+                    <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">
-                      {book.author}
+                      {movement.Type}
                     </td>
                     <td className="py-2 px-4 border-b">
-                      {book.author}
+                      {movement.Adjustment}
                     </td>
                     <td className="py-2 px-4 border-b">
-                      {book.author}
+                      {movement.Date}
                     </td>
                     <td className="py-2 px-4 border-b">
-                      {book.author}
+                      {movement.Product_id}
                     </td>
                     <td className="py-2 px-4 border-b">
                       <div className="flex items-center">
-                        {book.status === "Active" ? "Free" : "Rented"}
+                        {movement.User}
                       </div>
                     </td>
-                    <td className="py-2 px-4 border-b">
-                      {book.rentPrice} Birr
-                    </td>
-                      <td className="py-3 px-4 border-b space-x-2">
-                        {/* <button
-                          onClick={() => onEditBook(book.id)}
-                          className="text-blue-500 hover:text-blue-700"
-                        >
-                          <FaEdit />
-                        </button> */}
-                        <button
-                            onClick={() => navigate(`/movement-detail/${book.id}`)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <FaEye />
-                        </button>
-                      </td>
                   </tr>
                 ))}
               </tbody>

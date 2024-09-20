@@ -6,7 +6,7 @@ import axios from "../axiosInterceptor";
 import withAuth from "../withAuth";
 import { GoImage } from "react-icons/go";
 
-const AddBook = () => {
+const AddProduct = () => {
   const [Name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
@@ -178,5 +178,5 @@ const AddBook = () => {
   );
 };
 
-export { AddBook };
-export default withAuth(AddBook);
+export { AddProduct };
+export default withAuth(AddProduct);
