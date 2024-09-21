@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "../axiosInterceptor";
 
 const IncomeSection = () => {
+  const [currentDateIncome, setCurrentDateIncome] = useState(0);
   const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
+  const [currentYearIncome, setCurrentYearIncome] = useState(0);
   const currentDate = new Date(); // Get current date
 
   // Format the current date for display
@@ -17,26 +19,51 @@ const IncomeSection = () => {
 
   const handleToggle = (period) => {
     setActivePeriod(period);
-    // Fetch income based on the selected period if needed
     fetchIncome(period);
   };
 
   // Function to fetch income data based on the selected period
   const fetchIncome = async (period) => {
     try {
-      const response = await axios.get(`http://localhost:5000/earning/${period}`);
-      const data = response.data;
+      let endpoint;
+      switch (period) {
+        case "daily":
+          endpoint = "api/sales/total-amount/day";
+          break;
+        case "monthly":
+          endpoint = "api/sales/total-amount/month";
+          break;
+        case "yearly":
+          endpoint = "api/sales/total-amount/year";
+          break;
+        default:
+          endpoint = "api/sales/total-amount/month"; // Default to monthly
+      }
 
-      // Assuming the response data contains earnings for the selected period
-      setCurrentMonthIncome(data.currentMonth || 0);
+      const response = await axios.get(endpoint);
+      console.log(`Response for ${period}:`, response.data); // Log entire response
+
+      // Accessing total directly from the response
+      const data = response.data.total; // Assuming total is a string
+      console.log(`Data for ${period}:`, data); // Log extracted data
+
+      // Convert the string to a float for calculations
+      const totalAmount = parseFloat(data) || 0;
+
+      if (period === "daily") {
+        setCurrentDateIncome(totalAmount);
+      } else if (period === "monthly") {
+        setCurrentMonthIncome(totalAmount);
+      } else if (period === "yearly") {
+        setCurrentYearIncome(totalAmount);
+      }
     } catch (error) {
       console.error("Error fetching income data:", error);
     }
   };
 
-  // Fetch initial income data
   useEffect(() => {
-    fetchIncome(activePeriod);
+    fetchIncome(activePeriod); // Fetch income when component mounts or activePeriod changes
   }, [activePeriod]);
 
   return (
@@ -58,7 +85,13 @@ const IncomeSection = () => {
         </div>
       </div>
       <div className="mt-4">
-        <p className="text-2xl font-extrabold">{currentMonthIncome.toFixed(0)}</p>
+        <p className="text-2xl font-extrabold">
+          {activePeriod === "daily"
+            ? currentDateIncome.toFixed(2)
+            : activePeriod === "monthly"
+            ? currentMonthIncome.toFixed(2)
+            : currentYearIncome.toFixed(2)}
+        </p>
       </div>
       <p className="mb-6 text-sm font-bold">Total Sales</p>
       <p className="mb-6 text-sm">{formattedDate}</p>

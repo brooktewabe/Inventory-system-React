@@ -49,6 +49,7 @@ const Dashboard = () => {
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">No.</td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Product ID</td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Category</td>
+                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Price</td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Current Stock Level</td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Reorder Level</td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Location</td>
@@ -61,6 +62,7 @@ const Dashboard = () => {
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b"> {stock.Name}</td>
                     <td className="py-2 px-4 border-b"> {stock.Category}</td>
+                    <td className="py-2 px-4 border-b"> {stock.Price}</td>
                     <td className="py-2 px-4 border-b"> {stock.Curent_stock}</td>
                     <td className="py-2 px-4 border-b">{stock.Reorder_level}</td>
                     <td className="py-2 px-4 border-b">{stock.Location}</td>
