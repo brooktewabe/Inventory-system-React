@@ -11,7 +11,6 @@ import Swal from "sweetalert2";
 import UnauthorizedAccess from "../Components/UnauthorizedAccess";
 
 const UserAdmin = () => {
-
   const [users, setUsers] = useState([]);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,43 +23,13 @@ const UserAdmin = () => {
   const [role, setRole] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
   const currentRole = localStorage.getItem("role");
-
   const [errors, setErrors] = useState({});
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
-
-    try {
-      await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fname,
-          lname,
-          email,
-          password,
-          role,
-        }),
-      });
-      toast.success("Registration successful");
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        toast.error("Email already in use");
-      } else {
-        toast.error("Failed to add. Please try again later.");
-      }
-      console.error(error);
-    }
-  };
   const validateForm = () => {
     const schema = Yup.object().shape({
-      lname: Yup.string().required("Last name is required"),
       fname: Yup.string().required("First name is required"),
+      lname: Yup.string().required("Last name is required"),
       email: Yup.string()
-        .email("Invalid email address")
         .required("Email is required"),
       password: Yup.string()
         .required("Password is required")
@@ -69,7 +38,7 @@ const UserAdmin = () => {
 
     try {
       schema.validateSync(
-        { email, password, fname, lname },
+        { email, password, fname, lname, confirmPassword },
         { abortEarly: false }
       );
       setErrors({});
@@ -83,6 +52,39 @@ const UserAdmin = () => {
       return false;
     }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      await axios.post("/api/signup", {
+        fname,
+        lname,
+        email,
+        password,
+        role,
+      });
+      toast.success("Registration successful");
+      window.location.reload();
+      // Optionally reset fields
+      setFname("");
+      setLname("");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        toast.error("Email already in use");
+      } else {
+        toast.error("Failed to add. Please try again later.");
+      }
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -105,6 +107,7 @@ const UserAdmin = () => {
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
+    setFilteredUsers(updatedUsers);
   }, [searchTerm, users]);
 
   const onDeleteUser = async (id) => {
@@ -116,7 +119,7 @@ const UserAdmin = () => {
       confirmButtonText: "Yes",
       cancelButtonText: "Cancel",
       customClass: {
-        cancelButton: "border border-gray-700 px-6 py-2 w-32 rounded-3xl ",
+        cancelButton: "border border-gray-700 px-6 py-2 w-32 rounded-3xl",
         confirmButton: "bg-red-500 text-white px-6 py-2 w-32 rounded-3xl",
       },
     }).then(async (result) => {
@@ -134,26 +137,22 @@ const UserAdmin = () => {
 
   return (
     <section className="bg-[#edf0f0b9] h-screen">
-            {currentRole === "admin" ? (
-      <div className="container m-auto ">
-        <div className="grid grid-cols-1 gap-6">
-          <div className="bg-white p-4  ">
-            <h3 className="text-xl font-bold">User Administration</h3>
-          </div>
-          <div className="gap-6">
-            <div>
-              <div className="bg-white p-2 w-[60%] rounded-lg ml-40 shadow-md cursor-pointer">
-                <div className="items-center mb-4 flex flex-col">
-                  <p className="mt-4 text-2xl">Add User</p>
-                  <form onSubmit={handleSubmit} autoComplete="false" className=" mx-auto mt-4">
-                    <div className="mb-4">
-                      <label
-                        htmlFor="fname"
-                        className="text-gray-400 block text-sm mb-2"
-                      >
-                        First name
-                      </label>
-                      <div className="flex flex-col">
+      {currentRole === "admin" ? (
+        <div className="container m-auto">
+          <div className="grid grid-cols-1 gap-6">
+            <div className="bg-white p-4">
+              <h3 className="text-xl font-bold">User Administration</h3>
+            </div>
+            <div className="gap-6">
+              <div>
+                <div className="bg-white p-2 w-[60%] rounded-lg ml-40 shadow-md cursor-pointer">
+                  <div className="items-center mb-4 flex flex-col">
+                    <p className="mt-4 text-2xl">Add User</p>
+                    <form onSubmit={handleSubmit} autoComplete="false" className="mx-auto mt-4">
+                      <div className="mb-4">
+                        <label htmlFor="fname" className="text-gray-400 block text-sm mb-2">
+                          First name
+                        </label>
                         <input
                           id="fname"
                           name="fname"
@@ -161,24 +160,17 @@ const UserAdmin = () => {
                           placeholder="Enter first name"
                           value={fname}
                           onChange={(e) => setFname(e.target.value)}
-                          className={`shadow appearance-none  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline ${
+                          className={`shadow appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${
                             errors.fname ? "border-red-500" : ""
                           }`}
                         />
-                        {errors.fname && (
-                          <div className="text-red-500 text-sm">
-                            {errors.fname}
-                          </div>
-                        )}
+                        {errors.fname && <div className="text-red-500 text-sm">{errors.fname}</div>}
                       </div>
 
-                      <label
-                        htmlFor="lname"
-                        className="text-gray-400 block text-sm mb-2"
-                      >
-                        Last name
-                      </label>
-                      <div className="flex flex-col">
+                      <div className="mb-4">
+                        <label htmlFor="lname" className="text-gray-400 block text-sm mb-2">
+                          Last name
+                        </label>
                         <input
                           id="lname"
                           name="lname"
@@ -186,23 +178,17 @@ const UserAdmin = () => {
                           placeholder="Enter last name"
                           value={lname}
                           onChange={(e) => setLname(e.target.value)}
-                          className={`shadow appearance-none  rounded w-full py-2 px-3   leading-tight focus:outline-none focus:shadow-outline ${
-                            errors.email ? "border-red-500" : ""
+                          className={`shadow appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${
+                            errors.lname ? "border-red-500" : ""
                           }`}
                         />
-                        {errors.lname && (
-                          <div className="text-red-500 text-sm">
-                            {errors.lname}
-                          </div>
-                        )}
+                        {errors.lname && <div className="text-red-500 text-sm">{errors.lname}</div>}
                       </div>
-                      <label
-                        htmlFor="email"
-                        className="text-gray-400 block text-sm mb-2"
-                      >
-                        Email
-                      </label>
-                      <div className="flex flex-col">
+
+                      <div className="mb-4">
+                        <label htmlFor="email" className="text-gray-400 block text-sm mb-2">
+                          Email/Username
+                        </label>
                         <input
                           id="email"
                           name="email"
@@ -210,49 +196,40 @@ const UserAdmin = () => {
                           placeholder="Enter username/email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className={`shadow appearance-none  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline ${
+                          className={`shadow appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${
                             errors.email ? "border-red-500" : ""
                           }`}
                         />
-                        {errors.email && (
-                          <div className="text-red-500 text-sm">
-                            {errors.email}
-                          </div>
-                        )}
+                        {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
                       </div>
 
-                      <label
-                        htmlFor="email"
-                        className="text-gray-400 block text-sm mb-2"
-                      >
-                        Password
-                      </label>
-                      <div className="relative">
-                        <input
-                          id="password"
-                          name="password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className={`shadow appearance-none  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline ${
-                            errors.email ? "border-red-500" : ""
-                          }`}
-                        />
-
-                        <button
-                          type="button"
-                          className="absolute inset-y-0 right-0 pr-3 flex  items-center"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? <BiHide /> : <BiShow />}
-                        </button>
-                      </div>
-                      {errors.password && (
-                        <div className="text-red-500 text-sm">
-                          {errors.password}
+                      <div className="mb-4">
+                        <label htmlFor="password" className="text-gray-400 block text-sm mb-2">
+                          Password
+                        </label>
+                        <div className="relative">
+                          <input
+                            id="password"
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={`shadow appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${
+                              errors.password ? "border-red-500" : ""
+                            }`}
+                          />
+                          <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? <BiHide /> : <BiShow />}
+                          </button>
                         </div>
-                      )}
+                        {errors.password && <div className="text-red-500 text-sm">{errors.password}</div>}
+                      </div>
+
 
                       <button
                         type="submit"
@@ -260,76 +237,66 @@ const UserAdmin = () => {
                       >
                         Add
                       </button>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* full-width grid */}
-          <div className="bg-white p-6 rounded-lg shadow-md ml-20 mr-40 ">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className=" text-lg font-bold">Users List</h3>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => setSearchVisible(!searchVisible)}
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  <FaSearch size={20} />
-                </button>
+            {/* Users List */}
+            <div className="bg-white p-6 rounded-lg shadow-md ml-20 mr-40">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-bold">Users List</h3>
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={() => setSearchVisible(!searchVisible)}
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    <FaSearch size={20} />
+                  </button>
+                </div>
               </div>
-            </div>
-            {searchVisible && (
-              <input
-                type="text"
-                placeholder="Search Product"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full mb-4 p-2 border border-gray-300 rounded"
-              />
-            )}
+              {searchVisible && (
+                <input
+                  type="text"
+                  placeholder="Search User"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full mb-4 p-2 border border-gray-300 rounded"
+                />
+              )}
 
-            <table className="min-w-full bg-white">
-              <thead>
-                <tr>
-                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
-                    No.
-                  </td>
-
-                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
-                    Email
-                  </td>
-                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
-                    Action
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((user,index) => (
-                  <tr key={user.id}>
-                    <td className="py-2 px-4 border-b">{index + 1}</td>
-                    <td className="py-2 px-4 border-b">{user.email}</td>
-
-                    <td className="py-3 px-4 border-b space-x-2">
-                      <button
-                        onClick={() => onDeleteUser(user.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <FaTrash />
-                      </button>
-                    </td>
+              <table className="min-w-full bg-white">
+                <thead>
+                  <tr>
+                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">No.</td>
+                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Email</td>
+                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Action</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((user, index) => (
+                    <tr key={user.id}>
+                      <td className="py-2 px-4 border-b">{index + 1}</td>
+                      <td className="py-2 px-4 border-b">{user.email}</td>
+                      <td className="py-3 px-4 border-b space-x-2">
+                        <button
+                          onClick={() => onDeleteUser(user.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <FaTrash />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-            ) : (
-              <UnauthorizedAccess />
-      
-            )}
+      ) : (
+        <UnauthorizedAccess />
+      )}
     </section>
   );
 };
