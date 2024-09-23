@@ -10,16 +10,19 @@ const RecordSale = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [sale, setSale] = useState(null);
-  const [Product_id, setProduct_id] = useState(id);
-  const [Full_name, setFull_name] = useState("");
-  const [Contact, setContact] = useState("");
-  const [Amount, setAmount] = useState("");
-  const [Payment_method, setPayment_method] = useState("");
-  const [Total_amount, setTotal_amount] = useState("");
-  const [Credit, setCredit] = useState("");
-  const [Credit_due, setCredit_due] = useState("");
-  const [Transaction_id, setTransaction_id] = useState("");
-  const [Receipt, setReceipt] = useState(null);
+  const [formData, setFormData] = useState({
+    Product_id: id,
+    Full_name: "",
+    Contact: "",
+    Quantity: "",
+    Amount: "",
+    Payment_method: "",
+    Total_amount: "",
+    Credit_due: "",
+    Credit: "",
+    Receipt: "",
+    Transaction_id: "",
+  });
 
   useEffect(() => {
     const fetchStock = async () => {
@@ -30,38 +33,55 @@ const RecordSale = () => {
         console.error("Error fetching:", error);
       }
     };
-
     fetchStock();
   }, [id]);
-
-  const handleFileChange = (e, setFile) => {
-    setFile(e.target.files[0]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("Product_id", Product_id);
-    formData.append("Full_name", Full_name);
-    formData.append("Contact", Contact);
-    formData.append("Amount", Amount);
-    formData.append("Payment_method", Payment_method);
-    formData.append("Total_amount", Total_amount);
-    formData.append("Credit_due", Credit_due);
-    formData.append("Credit", Credit);
-    formData.append("Transaction_id", Transaction_id);
-    if (Receipt) formData.append("files", Receipt);
-
+    // Calculate the new stock quantity
+    const newQuantity = sale.Curent_stock - formData.Quantity;
+  
+    // Check if the new quantity would be negative
+    if (newQuantity < 0) {
+      Swal.fire({
+        title: "Error!",
+        text: "Insufficient stock available.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "OK",
+      });
+      return; // Exit the function to prevent further actions
+    }
+  
+    // Prepare the PATCH request data
+    const patchData = { Curent_stock: newQuantity };
+  
     try {
-      const response = await axios.post(
-        `http://localhost:5000/sales`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // First, record the sale
+      await axios.post("http://localhost:5000/sales", formData, {
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      // Then, update the stock
+      await axios.patch(`http://localhost:5000/stock/${id}`, patchData);
+  
+      // Check if new quantity is less than reorder level
+      if (newQuantity < sale.Reorder_level) {
+        const notifData = {
+          message: `${sale.Name} is running low on stock.`,
+          priority: "High",
+        };
+        // Send the notification
+        await axios.post("http://localhost:5000/notification", notifData, {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+  
+      // Show success alert
       Swal.fire({
         title: "Success!",
         text: "Recorded successfully.",
@@ -72,17 +92,33 @@ const RecordSale = () => {
         navigate("/");
         toast.success("Recorded Successfully");
       });
+  
+      // Reset form after submission
+      setFormData({
+        Product_id: "",
+        Full_name: "",
+        Contact: "",
+        Quantity: "",
+        Amount: "",
+        Payment_method: "",
+        Total_amount: "",
+        Credit_due: "",
+        Credit: "",
+        Receipt: "",
+        Transaction_id: "",
+      });
     } catch (error) {
-      console.error("Error Recorded:", error);
+      console.error("Error creating sale:", error);
       toast.error("Error Recorded. Try again later." + error);
     }
   };
-
-  if (!sale) return <div>Loading...</div>;
-
+  
+  
   const handleCancel = () => {
     navigate("/");
   };
+  if (!sale) return <div>Loading...</div>;
+
   return (
     <section className="bg-[#edf0f0b9] h-screen">
       <div className="container m-auto ">
@@ -93,162 +129,194 @@ const RecordSale = () => {
           </div>
 
           {/* Create Product Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md max-w-[70%] ml-20">
-            <h3 className="text-xl font-bold mb-4">Record Sales</h3>
-            <hr />
-            <h3 className="text-md font-bold mb-4">Buyer Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Right Side */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    value={Full_name}
-                    onChange={(e) => setFull_name(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-              </div>
-              {/* Left Side */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Phone Number
-                  </label>
-                  <input
-                    type="number"
-                    value={Contact}
-                    onChange={(e) => setContact(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-              </div>
-            </div>
-            <br /> <hr />
-            <br />
-            <h3 className="text-md font-bold mb-4">Order Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Right Side */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Amount
-                  </label>
-                  <input
-                    type="number"
-                    value={Amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Credit Given
-                  </label>
-                  <input
-                    type="number"
-                    value={Credit}
-                    onChange={(e) => setCredit(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Transaction ID
-                  </label>
-                  <input
-                    type="text"
-                    value={Transaction_id}
-                    onChange={(e) => setTransaction_id(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-              </div>
-              {/* 2nd Side */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Payment Method
-                  </label>
-                  <input
-                    type="text"
-                    value={Payment_method}
-                    onChange={(e) => setPayment_method(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Credit due
-                  </label>
-                  <input
-                    type="text"
-                    value={Credit_due}
-                    onChange={(e) => setCredit_due(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-              </div>
-              {/* 3rd Side */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700">
-                    Total Payment
-                  </label>
-                  <input
-                    type="number"
-                    value={Total_amount}
-                    onChange={(e) => setTotal_amount(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
-                  />
-                </div>
-                <div className="mb-4 w-1/2">
-                  <label className="block text-sm font-bold text-gray-700">
-                    Receipt
-                  </label>
-                  <input
-                    type="file"
-                    id="Receipt"
-                    name="Receipt"
-                    onChange={(e) => handleFileChange(e, setReceipt)}
-                    className="hidden"
-                    required
-                    accept=".pdf, .docs, .doc"
-                  />
-                  <div className="flex items-center">
-                    <div className="bg-[#]">
-                      <GoImage size={30} />
-                    </div>
-                    <label
-                      htmlFor="Receipt"
-                      className="text-white bg-[#16033a] py-2 px-6  mx-2 cursor-pointer border rounded-2xl"
-                    >
-                      Upload Image <br />
-                      {/* <span className="text-[#98b4c7]">(Required)</span> */}
+          <form onSubmit={handleSubmit}>
+            <div className="bg-white p-6 rounded-lg shadow-md max-w-[70%] ml-20">
+              <h3 className="text-xl font-bold mb-4">Record Sales</h3>
+              <hr />
+              <h3 className="text-md font-bold mb-4">Buyer Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Right Side */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Full Name
                     </label>
+                    <input
+                      type="text"
+                      name="Full_name"
+                      value={formData.Full_name}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                </div>
+                {/* Left Side */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Phone Number
+                    </label>
+                    <input
+                      type="number"
+                      name="Contact"
+                      value={formData.Contact}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
                   </div>
                 </div>
               </div>
+              <br /> <hr />
+              <br />
+              <h3 className="text-md font-bold mb-4">Order Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Right Side */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Quantity
+                    </label>
+                    <input
+                      type="number"
+                      name="Quantity"
+                      value={formData.Quantity}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Credit Given
+                    </label>
+                    <input
+                      type="number"
+                      name="Credit"
+                      value={formData.Credit}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Transaction ID
+                    </label>
+                    <input
+                      type="text"
+                      name="Transaction_id"
+                      value={formData.Transaction_id}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                </div>
+                {/* 2nd Side */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Amount
+                    </label>
+                    <input
+                      type="number"
+                      name="Amount"
+                      value={formData.Amount}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Payment Method
+                    </label>
+                    <input
+                      type="text"
+                      name="Payment_method"
+                      value={formData.Payment_method}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                  <div className="mb-4 w-1/2">
+                    <label className="block text-sm font-bold text-gray-700">
+                      Receipt
+                    </label>
+                    {/* <input
+                      type="file"
+                      id="Receipt"
+                      name="Receipt"
+                      onChange={(e) => handleFileChange(e, setReceipt)}
+                      className="hidden"
+                      accept=".pdf, .docs, .doc"
+                    /> */}
+                    <input
+                      type="file"
+                      id="Receipt"
+                      name="Receipt"
+                      value={formData.Receipt}
+                      onChange={handleChange}
+                      className="hidden"
+                      accept=".png, .jpg, .jpeg"
+                    />
+                    {/* <input type="text" name="Receipt" placeholder="Receipt" value={formData.Receipt} onChange={handleChange} /> */}
+
+                    <div className="flex items-center">
+                      <div className="bg-[#]">
+                        <GoImage size={30} />
+                      </div>
+                      <label
+                        htmlFor="Receipt"
+                        className="text-white bg-[#16033a] py-2 px-6  mx-2 cursor-pointer border rounded-2xl"
+                      >
+                        Upload Image <br />
+                        {/* <span className="text-[#98b4c7]">(Required)</span> */}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                {/* 3rd Side */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Total Payment
+                    </label>
+                    <input
+                      type="number"
+                      name="Total_amount"
+                      value={formData.Total_amount}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700">
+                      Credit due
+                    </label>
+                    <input
+                      type="date"
+                      name="Credit_due"
+                      value={formData.Credit_due}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Buttons */}
+              <div className="flex justify-around space-x-4 mt-6">
+                <button
+                  onClick={handleCancel}
+                  className="border border-gray-400 text-gray-700 px-16 py-2 rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  className="bg-[#16033a]  text-white px-16 py-2 rounded-lg"
+                >
+                  Add
+                </button>
+              </div>
             </div>
-            {/* Buttons */}
-            <div className="flex justify-around space-x-4 mt-6">
-              <button
-                onClick={handleCancel}
-                className="border border-gray-400 text-gray-700 px-16 py-2 rounded-lg"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="bg-[#16033a]  text-white px-16 py-2 rounded-lg"
-              >
-                Add
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </section>

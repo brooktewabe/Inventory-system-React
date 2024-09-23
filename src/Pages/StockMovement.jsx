@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../axiosInterceptor";
 import withAuth from "../withAuth";
-import { FaEye} from "react-icons/fa";
+import { FaEye, FaPlus, FaMinus, FaEdit} from "react-icons/fa";
 
 const StockMovement = () => {
   const navigate = useNavigate();
@@ -49,15 +49,15 @@ const StockMovement = () => {
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     Type
                   </td>
-
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
-                    Date
+                    Name
                   </td>
+
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                   Stock Adjustment
                   </td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
-                    Product ID
+                    Date
                   </td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     User
@@ -70,19 +70,23 @@ const StockMovement = () => {
               <tbody>
                 {filteredMovements.map((movement,index) => (
                   <tr key={movement.id}>
-                    <td className="py-2 px-4 border-b">{}</td>
+                   <td className="py-2 px-4 border-b">
+                    {movement.Type === "Addition" && <FaPlus className="text-green-500" />}
+                    {movement.Type === "Reduction" && <FaMinus className="text-red-500" />}
+                    {movement.Type === "Modification" && <FaEdit className="text-blue-500" />}
+                  </td>
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">
                       {movement.Type}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {movement.Name}
                     </td>
                     <td className="py-2 px-4 border-b">
                       {movement.Adjustment}
                     </td>
                     <td className="py-2 px-4 border-b">
                       {movement.Date}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {movement.Product_id}
                     </td>
                     <td className="py-2 px-4 border-b">
                       <div className="flex items-center">

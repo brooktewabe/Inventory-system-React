@@ -95,12 +95,12 @@ const Sales = () => {
                 >
                   <FaSearch size={20} />
                 </button>
-                <button
+                {/* <button
                   onClick={() => setFilterVisible(!filterVisible)}
                   className="text-gray-600 hover:text-gray-900"
                 >
                   <FaFilter size={20} />
-                </button>
+                </button> */}
               </div>
             </div>
             {searchVisible && (
@@ -112,7 +112,7 @@ const Sales = () => {
                 className="w-full mb-4 p-2 border border-gray-300 rounded"
               />
             )}
-            {filterVisible && (
+            {/* {filterVisible && (
               <div className="mb-4">
                 <select
                   value={filterStatus}
@@ -124,7 +124,7 @@ const Sales = () => {
                   <option value="unavailable">Rented</option>
                 </select>
               </div>
-            )}
+            )} */}
             <table className="min-w-full bg-white">
               <thead>
                 <tr>
@@ -137,6 +137,12 @@ const Sales = () => {
                   </td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     Category
+                  </td>
+                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                    Name
+                  </td>
+                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                    Price
                   </td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     Current Stock Level
@@ -158,10 +164,16 @@ const Sales = () => {
                   <tr key={stock.id}>
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">
-                    {stock.Name}
+                    {stock.id}
                     </td>
                     <td className="py-2 px-4 border-b">
                     {stock.Category}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                    {stock.Name}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                    {stock.Price}
                     </td>
                     <td className="py-2 px-4 border-b">
                     {stock.Curent_stock}
