@@ -64,11 +64,15 @@ const ViewSaleDetail = () => {
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Product ID</strong>
-                  <span>{sale.author}</span>
+                  <span>{sale.Product_id}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Price</strong>
                   <span>{sale.Amount}</span>
+                </div>
+                <div className="flex items-center">
+                  <strong className="w-60 text-[#8f8d8d]">Quantity</strong>
+                  <span>{sale.Quantity}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Payment Method</strong>
@@ -77,6 +81,14 @@ const ViewSaleDetail = () => {
                 <div className="flex items-center">
                   <strong className="w-60 text-[#8f8d8d]">Credit</strong>
                   <span>{sale.Credit}</span>
+                </div>
+                <div className="flex items-center">
+                  <strong className="w-60 text-[#8f8d8d]">Credit Due</strong>
+                  <span>{sale.Credit_due}</span>
+                </div>
+                <div className="flex items-center">
+                  <strong className="w-60 text-[#8f8d8d]">Receipt</strong>
+                  <span>{sale.Receipt}</span>
                 </div>
               </div>
               <button
