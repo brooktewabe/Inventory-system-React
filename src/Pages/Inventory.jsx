@@ -66,8 +66,20 @@ const Inventory = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          const response = await axios.get(`api/stock/${id}`);
+          const stockToDelete = response.data;
           await axios.delete(`api/stock/${id}`);
           setStocks(stocks.filter((stock) => stock.id !== id));
+          const notifData = new FormData();
+          notifData.append("message", `${stockToDelete.Name} is deleted.`);
+          notifData.append("priority", "High");
+  
+          // Post notification data
+          await axios.post("http://localhost:5000/notification", notifData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
           toast.success("Deleted Successfully");
         } catch (error) {
           toast.error("Error deleting stock. Try again later.");
@@ -133,12 +145,12 @@ const Inventory = () => {
                 >
                   <FaSearch size={20} />
                 </button>
-                <button
+                {/* <button
                   onClick={() => setFilterVisible(!filterVisible)}
                   className="text-gray-600 hover:text-gray-900"
                 >
                   <FaFilter size={20} />
-                </button>
+                </button> */}
               </div>
             </div>
             {searchVisible && (
@@ -150,7 +162,7 @@ const Inventory = () => {
                 className="w-full mb-4 p-2 border border-gray-300 rounded"
               />
             )}
-            {filterVisible && (
+            {/* {filterVisible && (
               <div className="mb-4">
                 <select
                   value={filterStatus}
@@ -162,7 +174,7 @@ const Inventory = () => {
                   <option value="unavailable">Rented</option>
                 </select>
               </div>
-            )}
+            )} */}
             <table className="min-w-full bg-white">
               <thead>
                 <tr>
@@ -175,6 +187,12 @@ const Inventory = () => {
                   </td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     Category
+                  </td>
+                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                    Name
+                  </td>
+                  <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                    Price
                   </td>
                   <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
                     Current Stock Level
@@ -196,10 +214,16 @@ const Inventory = () => {
                   <tr key={stock.id}>
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">
-                    {stock.Name}
+                    {stock.id}
                     </td>
                     <td className="py-2 px-4 border-b">
                     {stock.Category}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                    {stock.Name}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                    {stock.Price}
                     </td>
                     <td className="py-2 px-4 border-b">
                     {stock.Curent_stock}
