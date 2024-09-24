@@ -44,7 +44,61 @@ const RecordSale = () => {
     e.preventDefault();
     // Calculate the new stock quantity
     const newQuantity = sale.Curent_stock - formData.Quantity;
+    // Check for required fields
+    const requiredFields = [
+      "Full_name",
+      "Contact",
+      "Quantity",
+      "Amount",
+      "Payment_method",
+      "Total_amount",
+      "Transaction_id",
+    ];
   
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        Swal.fire({
+          title: "Error!",
+          text: `${field.replace("_", " ")} is required.`,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+        });
+        return; // Exit the function if validation fails
+      }
+    }
+  
+    // Check if Credit is provided and Credit_due is required
+    if (formData.Credit && (formData.Credit_due === null || formData.Credit_due === "")) {
+      Swal.fire({
+        title: "Error!",
+        text: "Credit Due is required when Credit is provided.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "OK",
+      });
+      return; // Exit the function if validation fails
+    }
+
+      // Check if Credit_due is in the future
+  if (formData.Credit_due) {
+    const dueDate = new Date(formData.Credit_due);
+    const today = new Date();
+
+    // Set time of today to 00:00:00 for accurate comparison
+    today.setHours(0, 0, 0, 0);
+
+    if (dueDate <= today) {
+      Swal.fire({
+        title: "Error!",
+        text: "Credit Due must be a future date.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "OK",
+      });
+      return; // Exit the function if validation fails
+    }
+  }
     // Check if the new quantity would be negative
     if (newQuantity < 0) {
       Swal.fire({
@@ -109,7 +163,7 @@ const RecordSale = () => {
       });
     } catch (error) {
       console.error("Error creating sale:", error);
-      toast.error("Error Recorded. Try again later." + error);
+      toast.error("Error Recorded. Try again later. Make sure all fields are appropriately filled");
     }
   };
   
