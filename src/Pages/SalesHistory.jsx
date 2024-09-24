@@ -126,7 +126,7 @@ const SalesHistory = () => {
                 {filteredSales.map((sale, index) => (
                   <tr key={sale.id}>
                     <td className="py-2 px-4 border-b">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="py-2 px-4 border-b">{sale.Product_id}{formatProductId(sale.Product_id)}</td>
+                    <td className="py-2 px-4 border-b">{formatProductId(sale.Product_id)}</td>
                     <td className="py-2 px-4 border-b">{sale.Full_name}</td>
                     <td className="py-2 px-4 border-b">{sale.Amount}</td>
                     <td className="py-2 px-4 border-b">{sale.Payment_method}</td>

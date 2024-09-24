@@ -50,7 +50,10 @@ const Inventory = () => {
 
     setFilteredStocks(updatedStocks);
   }, [searchTerm, filterStatus, stocks]);
-
+  const formatProductId = (id) => {
+    if (id.length <= 10) return id; // Return the id if it's less than or equal to 10 characters
+    return `${id.slice(0, 3)}...${id.slice(-5)}`; // Format as 'xxxxx...xxxxx'
+  };
   const onDelete = async (id) => {
     Swal.fire({
       text: "Are you sure you want to delete this product?",
@@ -214,7 +217,7 @@ const Inventory = () => {
                   <tr key={stock.id}>
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">
-                    {stock.id}
+                    {formatProductId( stock.id )}
                     </td>
                     <td className="py-2 px-4 border-b">
                     {stock.Category}

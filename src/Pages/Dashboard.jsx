@@ -18,7 +18,10 @@ const Dashboard = () => {
 
     fetchStocks();
   }, []);
-
+  const formatProductId = (id) => {
+    if (id.length <= 10) return id; // Return the id if it's less than or equal to 10 characters
+    return `${id.slice(0, 3)}...${id.slice(-5)}`; // Format as 'xxxxx...xxxxx'
+  };
   return (
     <section className="bg-[#edf0f0b9] h-screen">
       <div className="container m-auto ">
@@ -60,8 +63,9 @@ const Dashboard = () => {
                 {stocks.map((stock, index) => (
                   <tr key={stock.id}>
                     {/* Use index + 1 for numbering */}
+                    
                     <td className="py-2 px-4 border-b">{index + 1}</td>
-                    <td className="py-2 px-4 border-b"> {stock.id}</td>
+                    <td className="py-2 px-4 border-b"> {formatProductId(stock.id)}</td>
                     <td className="py-2 px-4 border-b"> {stock.Category}</td>
                     <td className="py-2 px-4 border-b"> {stock.Name}</td>
                     <td className="py-2 px-4 border-b"> {stock.Price}</td>

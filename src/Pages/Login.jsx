@@ -57,7 +57,7 @@ const ValidatedLoginForm = () => {
   const validateForm = () => {
     const schema = Yup.object().shape({
       email: Yup.string()
-        .email("Invalid email address")
+        // .email("Invalid email address")
         .required("Email is required"),
       password: Yup.string()
         .required("Password is required")

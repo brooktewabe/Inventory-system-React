@@ -52,7 +52,10 @@ const Sales = () => {
     setFilteredStocks(updatedStocks);
   }, [searchTerm, filterStatus, stocks]);
   
-
+  const formatProductId = (id) => {
+    if (id.length <= 10) return id; // Return the id if it's less than or equal to 10 characters
+    return `${id.slice(0, 3)}...${id.slice(-5)}`; // Format as 'xxxxx...xxxxx'
+  };
   const onEditStock = (id) => {
     navigate(`/record-sale/${id}`);
   };
@@ -164,7 +167,7 @@ const Sales = () => {
                   <tr key={stock.id}>
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">
-                    {stock.id}
+                    {formatProductId( stock.id)}
                     </td>
                     <td className="py-2 px-4 border-b">
                     {stock.Category}
