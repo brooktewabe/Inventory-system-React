@@ -163,7 +163,7 @@ const Sales = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredStocks.map((stock, index) => (
+                {filteredStocks?.map((stock, index) => (
                   <tr key={stock.id}>
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">

@@ -60,7 +60,7 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {stocks.map((stock, index) => (
+                {stocks?.map((stock, index) => (
                   <tr key={stock.id}>
                     {/* Use index + 1 for numbering */}
                     

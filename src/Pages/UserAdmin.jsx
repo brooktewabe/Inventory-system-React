@@ -275,7 +275,7 @@ const UserAdmin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map((user, index) => (
+                  {filteredUsers?.map((user, index) => (
                     <tr key={user.id}>
                       <td className="py-2 px-4 border-b">{index + 1}</td>
                       <td className="py-2 px-4 border-b">{user.email}</td>

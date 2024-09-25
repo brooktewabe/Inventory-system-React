@@ -178,7 +178,7 @@ const Navbar = () => {
         <nav className="flex-1">
           <ul className="flex flex-col p-4 text-white">
             {role === "user" &&
-              userMenu.map(({ icon, text, link }, index) => (
+              userMenu?.map(({ icon, text, link }, index) => (
                 <li key={index} className="my-2">
                   <NavLink
                     to={link}
@@ -191,7 +191,7 @@ const Navbar = () => {
                 </li>
               ))}
             {role === "admin" &&
-              adminMenu.map(({ icon, text, link }, index) => (
+              adminMenu?.map(({ icon, text, link }, index) => (
                 <li key={index} className="my-4">
                   <NavLink
                     to={link}

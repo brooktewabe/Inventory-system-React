@@ -117,13 +117,13 @@ const SalesHistory = () => {
             <table className="min-w-full bg-white">
               <thead>
                 <tr>
-                  {["No.", "Product ID", "Client", "Amount", "Payment", "Credit", "Contact", "Action"].map((header) => (
+                  {["No.", "Product ID", "Client", "Amount", "Payment", "Credit", "Contact", "Action"]?.map((header) => (
                     <td key={header} className="py-2 text-[#9aa3a7] text-sm px-4 border-b">{header}</td>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {filteredSales.map((sale, index) => (
+                {filteredSales?.map((sale, index) => (
                   <tr key={sale.id}>
                     <td className="py-2 px-4 border-b">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                     <td className="py-2 px-4 border-b">{formatProductId(sale.Product_id)}</td>

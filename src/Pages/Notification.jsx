@@ -101,7 +101,7 @@ const Notification = () => {
 
               <table className="min-w-full bg-white">
                 <tbody>
-                  {filteredNotifications.toReversed().map((notification, index) => (
+                  {filteredNotifications?.toReversed().map((notification, index) => (
                     <tr key={notification.id}>
                       <td className="py-2 px-4 border-b">{index + 1}</td>
                       <td className="py-2 px-4 border-b">{notification.message}</td>

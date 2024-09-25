@@ -12,13 +12,13 @@ const IncomeSection = () => {
   });
 
   // State for active toggle button
-  // const [activePeriod, setActivePeriod] = useState("monthly");
+  const [activePeriod, setActivePeriod] = useState("monthly");
 
-  // const handleToggle = (period) => {
-  //   setActivePeriod(period);
-  //   // Fetch income based on the selected period if needed
-  //   fetchIncome(period);
-  // };
+  const handleToggle = (period) => {
+    setActivePeriod(period);
+    // Fetch income based on the selected period if needed
+    fetchIncome(period);
+  };
 
   // Function to fetch income data based on the selected period
   const fetchIncome = async (period) => {
@@ -32,17 +32,17 @@ const IncomeSection = () => {
     }
   };
   fetchIncome()
-  // // Fetch initial income data
-  // useEffect(() => {
-  //   fetchIncome(activePeriod);
-  // }, [activePeriod]);
+  // Fetch initial income data
+  useEffect(() => {
+    fetchIncome(activePeriod);
+  }, [activePeriod]);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-bold">Total Inventory value</h3>
-        {/* <div className="flex">
-          {["yearly", "monthly", "daily"].map((period) => (
+        <div className="flex">
+          {["yearly", "monthly", "daily"]?.map((period) => (
             <button
               key={period}
               onClick={() => handleToggle(period)}
@@ -53,7 +53,7 @@ const IncomeSection = () => {
               {period.charAt(0).toUpperCase() + period.slice(1)}
             </button>
           ))}
-        </div> */}
+        </div>
       </div>
       <div className="mt-4">
         <p className="text-2xl font-extrabold">{stockVal}</p>

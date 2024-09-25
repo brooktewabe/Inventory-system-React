@@ -15,53 +15,53 @@ const ValidatedLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (!validateForm()) {
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post("http://localhost:5000/login", {
-  //       email,
-  //       password,
-  //     });
-
-  //     Cookies.set("jwt", response.data.jwt, { expires: 1 });
-  //     // Cookies.set("userId", response.data.profileId, { expires: 1 });
-  //     localStorage.setItem("role", response.data.role);
-  //     localStorage.setItem("uid", response.data.id);
-
-  //     setEmail("");
-  //     setPassword("");
-  //     navigate("/");
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Login error:", error);
-  //     toast.error("Invalid email or password");
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
       return;
     }
-      Cookies.set("jwt", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA0OTA1YzgyLTdlY2MtNDVjZS1hNTMyLTJlYTNlN2YzYzY0NCIsImlhdCI6MTcyNzA4OTAzNSwiZXhwIjoxNzI3MTEwNjM1fQ.jEBzXW8iz1p9X_QIXR04csL2e3elkUn4NPBbNjOA9zs');
-      localStorage.setItem("role",'admin');
+
+    try {
+      const response = await axios.post("http://localhost:5000/login", {
+        email,
+        password,
+      });
+
+      Cookies.set("jwt", response.data.jwt, { expires: 1 });
+      // Cookies.set("userId", response.data.profileId, { expires: 1 });
+      localStorage.setItem("role", response.data.role);
+      localStorage.setItem("uid", response.data.id);
+
+      setEmail("");
+      setPassword("");
       navigate("/");
       window.location.reload();
-
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Invalid email or password");
+    }
   };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!validateForm()) {
+  //     return;
+  //   }
+  //     Cookies.set("jwt", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA0OTA1YzgyLTdlY2MtNDVjZS1hNTMyLTJlYTNlN2YzYzY0NCIsImlhdCI6MTcyNzA4OTAzNSwiZXhwIjoxNzI3MTEwNjM1fQ.jEBzXW8iz1p9X_QIXR04csL2e3elkUn4NPBbNjOA9zs');
+  //     localStorage.setItem("role",'admin');
+  //     navigate("/");
+  //     window.location.reload();
+
+  // };
   const validateForm = () => {
     const schema = Yup.object().shape({
-      email: Yup.string(),
+      email: Yup.string()
         // .email("Invalid email address")
-        // .required("Email is required"),
+        .required("Email is required"),
       password: Yup.string()
-        // .required("Password is required")
-        // .min(8, "Password must be at least 8 characters"),
+        .required("Password is required")
+        .min(8, "Password must be at least 8 characters"),
     });
 
     try {

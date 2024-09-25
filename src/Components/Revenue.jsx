@@ -41,11 +41,11 @@ const IncomeSection = () => {
       }
 
       const response = await axios.get(endpoint);
-      console.log(`Response for ${period}:`, response.data); // Log entire response
+      // console.log(`Response for ${period}:`, response.data); // Log entire response
 
       // Accessing total directly from the response
       const data = response.data.total; // Assuming total is a string
-      console.log(`Data for ${period}:`, data); // Log extracted data
+      // console.log(`Data for ${period}:`, data); // Log extracted data
 
       // Convert the string to a float for calculations
       const totalAmount = parseFloat(data) || 0;
@@ -71,7 +71,7 @@ const IncomeSection = () => {
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-bold">Revenue</h3>
         <div className="flex">
-          {["yearly", "monthly", "daily"].map((period) => (
+          {["yearly", "monthly", "daily"]?.map((period) => (
             <button
               key={period}
               onClick={() => handleToggle(period)}

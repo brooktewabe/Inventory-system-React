@@ -68,7 +68,7 @@ const StockMovement = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredMovements.map((movement,index) => (
+                {filteredMovements?.map((movement,index) => (
                   <tr key={movement.id}>
                    <td className="py-2 px-4 border-b">
                     {movement.Type === "Addition" && <FaPlus className="text-green-500" />}
