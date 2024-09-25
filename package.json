@@ -1,6 +1,7 @@
 {
   "name": "y",
   "private": true,
+  "homepage": "https://system.tridal.org",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
