@@ -32,7 +32,7 @@ const Notification = () => {
         // Filter notifications for the past 30 days
         const recentNotifications = response.data.filter(notification =>
           new Date(notification.createdAt) >= thirtyDaysAgo
-        );
+        ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).reverse(); // Sort by createdAt descending;
 
         setFilteredNotifications(recentNotifications);
       } catch (error) {

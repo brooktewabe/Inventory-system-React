@@ -84,12 +84,7 @@ const SalesHistory = () => {
                 >
                   <FaSearch size={20} />
                 </button>
-                {/* <button
-                  onClick={() => setFilterVisible(!filterVisible)}
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  <FaFilter size={20} />
-                </button> */}
+
               </div>
             </div>
             {searchVisible && (
@@ -101,19 +96,7 @@ const SalesHistory = () => {
                 className="w-full mb-4 p-2 border border-gray-300 rounded"
               />
             )}
-            {/* {filterVisible && (
-              <div className="mb-4">
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Select status</option>
-                  <option value="Active">Free</option>
-                  <option value="unavailable">Rented</option>
-                </select>
-              </div>
-            )} */}
+
             <table className="min-w-full bg-white">
               <thead>
                 <tr>
