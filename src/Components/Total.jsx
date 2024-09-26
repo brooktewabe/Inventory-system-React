@@ -42,7 +42,7 @@ const IncomeSection = () => {
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-bold">Total Inventory value</h3>
         <div className="flex">
-          {["yearly", "monthly", "daily"]?.map((period) => (
+          {((period) => (
             <button
               key={period}
               onClick={() => handleToggle(period)}

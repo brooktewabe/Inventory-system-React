@@ -117,7 +117,7 @@ const RecordSale = () => {
     try {
       // First, record the sale
       await axios.post("http://localhost:5000/sales", formData, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "multipart/form-data" },
       });
   
       // Then, update the stock
@@ -305,8 +305,11 @@ const RecordSale = () => {
                       type="file"
                       id="Receipt"
                       name="Receipt"
-                      value={formData.Receipt}
-                      onChange={handleChange}
+                      // value={formData.Receipt}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        setFormData({ ...formData, Receipt: file });
+                      }}
                       className="hidden"
                       accept=".png, .jpg, .jpeg"
                     />
