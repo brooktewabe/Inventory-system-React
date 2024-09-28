@@ -50,16 +50,16 @@ const ViewMovementDetail = () => {
                 </div>
                 <div className="flex items-center">
                   <strong className="w-40">Change Mode:</strong>
-                  <span className="text-[#8f8d8d]">{movement.Mode}</span>
+                  <span className="text-[#8f8d8d]">{movement.Type}</span>
                 </div>
                 <div className="flex items-center">
                   <strong className="w-40">Date:</strong>
                   <span className="text-[#8f8d8d]">{movement.Date}</span>
                 </div>
-                <div className="flex items-center">
+                {/* <div className="flex items-center">
                   <strong className="w-40">Reason:</strong>
                   <span className="text-[#8f8d8d]">{movement.Reason}</span>
-                </div>
+                </div> */}
               </div>
               <br />
               <br />
