@@ -83,6 +83,10 @@ const ViewSaleDetail = () => {
                 <span>{sale.Amount}</span>
               </div>
               <div className="flex items-center">
+                <strong className="w-60 text-[#8f8d8d]">Date</strong>
+                <span>{sale.Date}</span>
+              </div>
+              <div className="flex items-center">
                 <strong className="w-60 text-[#8f8d8d]">Quantity</strong>
                 <span>{sale.Quantity}</span>
               </div>

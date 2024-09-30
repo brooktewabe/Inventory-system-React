@@ -13,7 +13,7 @@ const StockMovement = () => {
   useEffect(() => {
     const fetchMovements = async () => {
       try {
-        const response = await axios.get("api/movement");
+        const response = await axios.get("api/movement?page=1&limit=100");
         setMovements(response.data.data);
         setFilteredMovements(response.data.data);
       } catch (error) {
@@ -36,8 +36,10 @@ const StockMovement = () => {
 
           {/* full-width grid */}
           <div className="bg-white p-6 rounded-lg shadow-md ml-6 ">
-          <div className="flex justify-between items-center mb-6">
+
+          <div className="items-center mb-6">
           <h3 className=" text-lg font-bold">Stock Movement</h3>
+          <p className=" text-sm">Showing recent 100 data</p>
           </div>
             <table className="min-w-full bg-white">
               <thead>
