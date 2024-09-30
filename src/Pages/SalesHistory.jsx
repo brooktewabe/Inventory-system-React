@@ -31,7 +31,7 @@ const SalesHistory = () => {
   const fetchSalesByName = async (name) => {
     try {
       const response = await axios.get(
-        `api/sales/name/${name}`
+        `apis/sales/name/${name}`
       );
       setSales(response.data);
       setTotalPages(1); // Assuming no pagination for filtered data
@@ -44,7 +44,7 @@ const SalesHistory = () => {
   const fetchSalesByDate = async (date) => {
     try {
       const response = await axios.get(
-        `api/sales/date/${date}`
+        `apis/sales/date/${date}`
       );
       setSales(response.data);
       setTotalPages(1); // Assuming no pagination for filtered data
