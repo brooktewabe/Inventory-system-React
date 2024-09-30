@@ -63,7 +63,6 @@ const ViewMovementDetail = () => {
               </div>
               <br />
               <br />
-              <br />
               <hr />
               <br />
               <button

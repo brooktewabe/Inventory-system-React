@@ -23,7 +23,7 @@ const Dashboard = () => {
     return `${id.slice(0, 3)}...${id.slice(-5)}`; // Format as 'xxxxx...xxxxx'
   };
   return (
-    <section className="bg-[#edf0f0b9] h-screen">
+    <section className="bg-[#edf0f0b9] min-h-screen">
       <div className="container m-auto ">
         <div className="grid grid-cols-1 gap-6">
           <div className="bg-white p-4">
