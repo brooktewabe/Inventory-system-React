@@ -18,7 +18,7 @@ const ViewSaleDetail = () => {
   useEffect(() => {
     const fetchSale = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/sales/${id}`);
+        const response = await axios.get(`https://api.akbsproduction.com/sales/${id}`);
         setSale(response.data);
       } catch (error) {
         console.error("Error fetching sale details:", error);
@@ -31,7 +31,7 @@ const ViewSaleDetail = () => {
     const fetchStock = async () => {
       if (sale && sale.Product_id) { 
         try {
-          const response = await axios.get(`http://localhost:5000/stock/${sale.Product_id}`);
+          const response = await axios.get(`https://api.akbsproduction.com/stock/${sale.Product_id}`);
           setStock(response.data);
         } catch (error) {
           console.error("Error fetching stock details:", error);
@@ -72,7 +72,7 @@ const ViewSaleDetail = () => {
               <h3 className="font-bold mb-4">Order Information</h3>
               <div className="flex items-center">
                 <strong className="w-60 text-[#8f8d8d]">Product Title</strong>
-                <span>{stock ? stock.Name : "Loading..."}</span> {/* Check if stock is available */}
+                <span>{stock ? stock.Name : "Product Not found"}</span> {/* Check if stock is available */}
               </div>
               <div className="flex items-center">
                 <strong className="w-60 text-[#8f8d8d]">Product ID</strong>
@@ -105,7 +105,7 @@ const ViewSaleDetail = () => {
               <div className="flex items-center">
                 <strong className="w-60 text-[#8f8d8d]">Receipt</strong>
                 {sale.Receipt && (
-                  <img src={`http://localhost:5000/uploads/${sale.Receipt}`} alt="Receipt" className="w-36 h-40" />
+                  <img src={`https://api.akbsproduction.com/uploads/${sale.Receipt}`} alt="Receipt" className="w-36 h-40" />
                 )}
               </div>
             </div>

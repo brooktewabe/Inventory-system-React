@@ -21,7 +21,7 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user/${uid}`);
+        const response = await axios.get(`https://api.akbsproduction.com/user/${uid}`);
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -58,7 +58,7 @@ const AddProduct = () => {
 
     try {
       // Create the product
-      const productResponse = await axios.post("api/stock/create", formData, {
+      const productResponse = await axios.post("https://api.akbsproduction.com/stock/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -73,7 +73,7 @@ const AddProduct = () => {
       };
 
       // Post movement data
-      const movementResponse = await axios.post("api/movement", mvtData, {
+      const movementResponse = await axios.post("https://api.akbsproduction.com/movement/create", mvtData, {
         headers: {
           "Content-Type": "application/json",
         },

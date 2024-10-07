@@ -19,7 +19,7 @@ const RecordSale = () => {
     Payment_method: "",
     Total_amount: "",
     Credit_due: "",
-    Credit: "",
+    Credit: "0",
     Receipt: "",
     Transaction_id: "",
   });
@@ -27,7 +27,7 @@ const RecordSale = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/stock/${id}`);
+        const response = await axios.get(`https://api.akbsproduction.com/stock/${id}`);
         setSale(response.data);
       } catch (error) {
         console.error("Error fetching:", error);
@@ -69,7 +69,7 @@ const RecordSale = () => {
     }
   
     // Check if Credit is provided and Credit_due is required
-    if (formData.Credit && (formData.Credit_due === null || formData.Credit_due === "")) {
+    if (formData.Credit &&  formData.Credit != 0 && (formData.Credit_due === null || formData.Credit_due === "")) {
       Swal.fire({
         title: "Error!",
         text: "Credit Due is required when Credit is provided.",
@@ -116,12 +116,12 @@ const RecordSale = () => {
   
     try {
       // First, record the sale
-      await axios.post("http://localhost:5000/sales", formData, {
+      await axios.post("https://api.akbsproduction.com/sales/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
       // Then, update the stock
-      await axios.patch(`http://localhost:5000/stock/${id}`, patchData);
+      await axios.patch(`https://api.akbsproduction.com/stock/${id}`, patchData);
   
       // Check if new quantity is less than reorder level
       if (newQuantity < sale.Reorder_level) {
@@ -130,7 +130,7 @@ const RecordSale = () => {
           priority: "High",
         };
         // Send the notification
-        await axios.post("http://localhost:5000/notification", notifData, {
+        await axios.post("https://api.akbsproduction.com/notification/create", notifData, {
           headers: { "Content-Type": "application/json" },
         });
       }

@@ -47,7 +47,7 @@ const EditProduct = () => {
 
       try {
         const response = await axios.patch(
-          `http://localhost:5000/stock/${id}`,
+          `https://api.akbsproduction.com/stock/${id}`,
           formData,
           {
             headers: {
@@ -64,7 +64,7 @@ const EditProduct = () => {
         mvtData.append("Type", "Modification");
 
         // Post movement data
-        await axios.post("http://localhost:5000/movement", mvtData, {
+        await axios.post("https://api.akbsproduction.com/movement/create", mvtData, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -76,7 +76,7 @@ const EditProduct = () => {
         notifData.append("priority", "High");
 
         // Post notification data
-        await axios.post("http://localhost:5000/notification", notifData, {
+        await axios.post("https://api.akbsproduction.com/notification/create", notifData, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -102,7 +102,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/stock/${id}`);
+        const response = await axios.get(`https://api.akbsproduction.com/stock/${id}`);
         setStock(response.data);
         formik.setValues({
           Name: response.data.Name,
@@ -128,7 +128,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user/${uid}`);
+        const response = await axios.get(`https://api.akbsproduction.com/user/${uid}`);
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching details:", error);

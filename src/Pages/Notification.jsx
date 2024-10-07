@@ -15,7 +15,7 @@ const Notification = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get("api/notification");
+        const response = await axios.get(`https://api.akbsproduction.com/notification/all`);
         setNotifications(response.data);
 
         // Get the date range

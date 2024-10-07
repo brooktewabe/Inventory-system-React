@@ -9,8 +9,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        const response = await axios.get("api/stock");
+        const response = await axios.get(`https://api.akbsproduction.com/stock/all`);
         setStocks(response.data.data); 
+        console.log(stocks)
       } catch (error) {
         console.error("Error fetching:", error);
       }

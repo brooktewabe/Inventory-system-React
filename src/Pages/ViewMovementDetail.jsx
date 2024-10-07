@@ -18,7 +18,7 @@ const ViewMovementDetail = () => {
   useEffect(() => {
     const fetchMovement= async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/movement/${id}`);
+        const response = await axios.get(`https://api.akbsproduction.com/movement/${id}`);
         setMovement(response.data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -41,7 +41,7 @@ const ViewMovementDetail = () => {
           {/* full-width grid */}
           <div className="bg-white p-6 rounded-lg shadow-md ml-40 max-w-2xl">
             <div className="ml-6 mb-6">
-              <h3 className="text-lg font-bold mb-4">Stock Movement</h3>
+              <h3 className="text-lg font-bold mb-4">Stock Movement | {movement.Type}{" "}</h3>
               <hr className="mb-4" />
 
                 <div className="flex items-center">

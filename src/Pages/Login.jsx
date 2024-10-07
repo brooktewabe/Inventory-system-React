@@ -23,7 +23,7 @@ const ValidatedLoginForm = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("https://api.akbsproduction.com/login", {
         email,
         password,
       });

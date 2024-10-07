@@ -29,8 +29,7 @@ const UserAdmin = () => {
     const schema = Yup.object().shape({
       fname: Yup.string().required("First name is required"),
       lname: Yup.string().required("Last name is required"),
-      email: Yup.string()
-        .required("Email is required"),
+      email: Yup.string().required("Email is required"),
       password: Yup.string()
         .required("Password is required")
         .min(8, "Password must be at least 8 characters"),
@@ -61,7 +60,7 @@ const UserAdmin = () => {
     }
 
     try {
-      await axios.post("/api/signup", {
+      await axios.post("/https://api.akbsproduction.com/signup", {
         fname,
         lname,
         email,
@@ -88,9 +87,13 @@ const UserAdmin = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("api/users");
-        setUsers(response.data);
-        setFilteredUsers(response.data);
+        const response = await axios.get("https://api.akbsproduction.com/users");
+        if (Array.isArray(response.data)) {
+          setUsers(response.data);
+          setFilteredUsers(response.data);
+        } else {
+          console.error("Response data is not an array:", response.data);
+        }
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -125,7 +128,7 @@ const UserAdmin = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`api/user/${id}`);
+          await axios.delete(`https://api.akbsproduction.com/user/${id}`);
           setUsers(users.filter((user) => user.id !== id));
           toast.success("Deleted Successfully");
         } catch (error) {
@@ -136,7 +139,7 @@ const UserAdmin = () => {
   };
 
   return (
-    <section className="bg-[#edf0f0b9] h-screen">
+    <section className="bg-[#edf0f0b9] min-h-screen">
       {currentRole === "admin" ? (
         <div className="container m-auto">
           <div className="grid grid-cols-1 gap-6">
@@ -148,9 +151,16 @@ const UserAdmin = () => {
                 <div className="bg-white p-2 w-[60%] rounded-lg ml-40 shadow-md cursor-pointer">
                   <div className="items-center mb-4 flex flex-col">
                     <p className="mt-4 text-2xl">Add User</p>
-                    <form onSubmit={handleSubmit} autoComplete="false" className="mx-auto mt-4">
+                    <form
+                      onSubmit={handleSubmit}
+                      autoComplete="false"
+                      className="mx-auto mt-4"
+                    >
                       <div className="mb-4">
-                        <label htmlFor="fname" className="text-gray-400 block text-sm mb-2">
+                        <label
+                          htmlFor="fname"
+                          className="text-gray-400 block text-sm mb-2"
+                        >
                           First name
                         </label>
                         <input
@@ -164,11 +174,18 @@ const UserAdmin = () => {
                             errors.fname ? "border-red-500" : ""
                           }`}
                         />
-                        {errors.fname && <div className="text-red-500 text-sm">{errors.fname}</div>}
+                        {errors.fname && (
+                          <div className="text-red-500 text-sm">
+                            {errors.fname}
+                          </div>
+                        )}
                       </div>
 
                       <div className="mb-4">
-                        <label htmlFor="lname" className="text-gray-400 block text-sm mb-2">
+                        <label
+                          htmlFor="lname"
+                          className="text-gray-400 block text-sm mb-2"
+                        >
                           Last name
                         </label>
                         <input
@@ -182,11 +199,18 @@ const UserAdmin = () => {
                             errors.lname ? "border-red-500" : ""
                           }`}
                         />
-                        {errors.lname && <div className="text-red-500 text-sm">{errors.lname}</div>}
+                        {errors.lname && (
+                          <div className="text-red-500 text-sm">
+                            {errors.lname}
+                          </div>
+                        )}
                       </div>
 
                       <div className="mb-4">
-                        <label htmlFor="email" className="text-gray-400 block text-sm mb-2">
+                        <label
+                          htmlFor="email"
+                          className="text-gray-400 block text-sm mb-2"
+                        >
                           Email/Username
                         </label>
                         <input
@@ -200,11 +224,18 @@ const UserAdmin = () => {
                             errors.email ? "border-red-500" : ""
                           }`}
                         />
-                        {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
+                        {errors.email && (
+                          <div className="text-red-500 text-sm">
+                            {errors.email}
+                          </div>
+                        )}
                       </div>
 
                       <div className="mb-4">
-                        <label htmlFor="password" className="text-gray-400 block text-sm mb-2">
+                        <label
+                          htmlFor="password"
+                          className="text-gray-400 block text-sm mb-2"
+                        >
                           Password
                         </label>
                         <div className="relative">
@@ -227,9 +258,12 @@ const UserAdmin = () => {
                             {showPassword ? <BiHide /> : <BiShow />}
                           </button>
                         </div>
-                        {errors.password && <div className="text-red-500 text-sm">{errors.password}</div>}
+                        {errors.password && (
+                          <div className="text-red-500 text-sm">
+                            {errors.password}
+                          </div>
+                        )}
                       </div>
-
 
                       <button
                         type="submit"
@@ -269,26 +303,44 @@ const UserAdmin = () => {
               <table className="min-w-full bg-white">
                 <thead>
                   <tr>
-                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">No.</td>
-                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Email</td>
-                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">Action</td>
+                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                      No.
+                    </td>
+                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                      Email
+                    </td>
+                    <td className="py-2 text-[#9aa3a7] text-sm px-4 border-b">
+                      Action
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers?.map((user, index) => (
-                    <tr key={user.id}>
-                      <td className="py-2 px-4 border-b">{index + 1}</td>
-                      <td className="py-2 px-4 border-b">{user.email}</td>
-                      <td className="py-3 px-4 border-b space-x-2">
-                        <button
-                          onClick={() => onDeleteUser(user.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <FaTrash />
-                        </button>
+                  {filteredUsers && filteredUsers.length > 0 ? (
+                    filteredUsers.map((user, index) => (
+                      <tr key={user.id}>
+                        <td className="py-2 px-4 border-b">{index + 1}</td>
+                        <td className="py-2 px-4 border-b">{user.email}</td>
+                        <td className="py-3 px-4 border-b space-x-2">
+                          {user.role !== "admin" ? (
+                            <button
+                              onClick={() => onDeleteUser(user.id)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <FaTrash />
+                            </button>
+                          ) : (
+                            <></>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="py-2 px-4 text-center">
+                        No users found
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

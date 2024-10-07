@@ -23,7 +23,7 @@ const Sales = () => {
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        const response = await axios.get("api/stock");
+        const response = await axios.get(`https://api.akbsproduction.com/stock/all`);
         setStocks(response.data.data);
         setFilteredStocks(response.data.data);
       } catch (error) {

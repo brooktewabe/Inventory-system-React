@@ -13,7 +13,7 @@ const StockMovement = () => {
   useEffect(() => {
     const fetchMovements = async () => {
       try {
-        const response = await axios.get("api/movement?page=1&limit=100");
+        const response = await axios.get("https://api.akbsproduction.com/movement/all?page=1&limit=100");
         setMovements(response.data.data);
         setFilteredMovements(response.data.data);
       } catch (error) {

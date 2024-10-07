@@ -22,7 +22,7 @@ const Inventory = () => {
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        const response = await axios.get("api/stock");
+        const response = await axios.get("https://api.akbsproduction.com/stock/all");
         setStocks(response.data.data);
         setFilteredStocks(response.data.data);
       } catch (error) {
@@ -69,16 +69,16 @@ const Inventory = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axios.get(`api/stock/${id}`);
+          const response = await axios.get(`https://api.akbsproduction.com/stock/${id}`);
           const stockToDelete = response.data;
-          await axios.delete(`api/stock/${id}`);
+          await axios.delete(`https://api.akbsproduction.com/stock/all/${id}`);
           setStocks(stocks.filter((stock) => stock.id !== id));
           const notifData = new FormData();
           notifData.append("message", `${stockToDelete.Name} is deleted.`);
           notifData.append("priority", "High");
   
           // Post notification data
-          await axios.post("http://localhost:5000/notification", notifData, {
+          await axios.post("https://api.akbsproduction.com/notification/create", notifData, {
             headers: {
               'Content-Type': 'application/json',
             },

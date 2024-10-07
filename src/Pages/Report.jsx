@@ -15,7 +15,7 @@ const Report = () => {
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        const stockResponse = await axios.get("api/stock/total/total-stock");
+        const stockResponse = await axios.get("https://api.akbsproduction.com/stock/total/total-stock");
         setStock(stockResponse.data.totalSum);
       } catch (error) {
         console.error("Error fetching stock:", error);
@@ -42,16 +42,16 @@ const Report = () => {
         let endpoint;
         switch (period) {
             case "daily":
-                endpoint = "api/sales/total-amount/day";
+                endpoint = "https://api.akbsproduction.com/sales/total-amount/day";
                 break;
             case "monthly":
-                endpoint = "api/sales/total-amount/month";
+                endpoint = "https://api.akbsproduction.com/sales/total-amount/month";
                 break;
             case "yearly":
-                endpoint = "api/sales/total-amount/year";
+                endpoint = "https://api.akbsproduction.com/sales/total-amount/year";
                 break;
             default:
-                endpoint = "api/sales/total-amount/month"; // Default to monthly
+                endpoint = "https://api.akbsproduction.com/sales/total-amount/month"; // Default to monthly
         }
 
         const response = await axios.get(endpoint);
