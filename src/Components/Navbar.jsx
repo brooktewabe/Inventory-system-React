@@ -1,6 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import Modal from "react-modal";
-import { AiOutlineMenu, AiOutlineUser, AiOutlineBars, AiOutlineSwap, AiTwotonePlusCircle, AiTwotoneReconciliation } from "react-icons/ai";
+import {
+  AiOutlineMenu,
+  AiOutlineUser,
+  AiOutlineBars,
+  AiOutlineSwap,
+  AiTwotonePlusCircle,
+  AiTwotoneReconciliation,
+} from "react-icons/ai";
 import { CiLogout, CiViewList } from "react-icons/ci";
 import { useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import { BiSolidDashboard } from "react-icons/bi";
@@ -26,11 +33,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-
   useEffect(() => {
-    const fetchInfo= async () => {
+    const fetchInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user/${uid}`);
+        const response = await axios.get(
+          `https://api.akbsproduction.com/user/${uid}`
+        );
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -134,7 +142,6 @@ const Navbar = () => {
     setNav(JSON.parse(localStorage.getItem("navCollapsed") || "false"));
   }, [location]);
 
-
   if (role !== "admin" && role !== "user") {
     return null;
   }
@@ -144,7 +151,7 @@ const Navbar = () => {
       <div
         ref={sidebarRef}
         className={`fixed top-0 left-0 h-screen bg-[#06030b] z-50 duration-300 
-          ${(nav) ? "w-[90px]" : "w-[13%]"} flex flex-col justify-between`}
+          ${nav ? "w-[90px]" : "w-[13%]"} flex flex-col justify-between`}
       >
         <div className="bg-[#06030b] rounded-t-xl p-4 flex flex-col">
           {!nav && (
@@ -160,7 +167,9 @@ const Navbar = () => {
               <div className="text-white bg-black rounded-3xl flex items-center p-2 mt-8">
                 <AiOutlineUser size={25} className="mr-4" />
                 <div>
-                  <h3 className="text-white">{user.fname+" " +user.lname}</h3>
+                  <h3 className="text-white">
+                    {user.fname + " " + user.lname}
+                  </h3>
                   <h3 className="text-neutral-800">{role}</h3>
                 </div>
               </div>
@@ -175,7 +184,7 @@ const Navbar = () => {
           )}
         </div>
 
-        <nav className="flex-1">
+        <nav className="flex-1 overflow-y-auto scrollbar-hide">
           <ul className="flex flex-col p-4 text-white">
             {role === "user" &&
               userMenu?.map(({ icon, text, link }, index) => (
@@ -226,31 +235,31 @@ const Navbar = () => {
 
       {/* Logout Confirmation Modal */}
       <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={() => setModalIsOpen(false)}
-      contentLabel="Confirm Logout"
-      className="bg-white p-6 rounded-lg shadow-md w-1/4 mx-auto"
-      overlayClassName="fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center"
-    >
-      <div className="text-center mb-4">
-        <CiLogout size={50} className="mx-auto mb-4" />
-        <p className="mb-4 text-center">Are you sure you want to logout?</p>
-      </div>
-      <div className="flex justify-center space-x-4">
-        <button
-          onClick={() => setModalIsOpen(false)}
-          className="border border-gray-700 px-6 py-2 w-32 rounded-3xl text-gray-700"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-6 py-2 w-32 rounded-3xl"
-        >
-          Yes
-        </button>
-      </div>
-    </Modal>
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Confirm Logout"
+        className="bg-white p-6 rounded-lg shadow-md w-1/4 mx-auto"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center"
+      >
+        <div className="text-center mb-4">
+          <CiLogout size={50} className="mx-auto mb-4" />
+          <p className="mb-4 text-center">Are you sure you want to logout?</p>
+        </div>
+        <div className="flex justify-center space-x-4">
+          <button
+            onClick={() => setModalIsOpen(false)}
+            className="border border-gray-700 px-6 py-2 w-32 rounded-3xl text-gray-700"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-6 py-2 w-32 rounded-3xl"
+          >
+            Yes
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

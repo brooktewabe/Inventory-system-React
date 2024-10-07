@@ -1,6 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+// axios.defaults.baseURL = 'https://api.akbsproduction.com';
+
 axios.interceptors.request.use(
   (config) => {
     const token = Cookies.get('jwt');
