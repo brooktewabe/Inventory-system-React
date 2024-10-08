@@ -115,7 +115,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/logout", {
+      await axios.post(`https://api.akbsproduction.com/logout`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
