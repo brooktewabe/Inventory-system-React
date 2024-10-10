@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams,useLocation  } from "react-router-dom";
 import axios from "../axiosInterceptor";
 import withAuth from "../withAuth";
 import { GoImage } from "react-icons/go";
 import { toast, ToastContainer } from "react-toastify";
 
 const RecordSale = () => {
+  // const location = useLocation();
+  // const { id } = location.state || {}; // Extract id from state (props)
   const { id } = useParams();
   const navigate = useNavigate();
   const [sale, setSale] = useState(null);

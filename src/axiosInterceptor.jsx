@@ -1,9 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// Set the base URL for Axios
-axios.defaults.baseURL = 'https://api.akbsproduction.com';
-
 // Flag to prevent further requests after logout
 let isLoggedOut = false;
 
@@ -39,9 +36,7 @@ axios.interceptors.response.use(
 // Logout function
 const handleLogout = async () => {
   try {
-    // Attempt to log out
     await axios.post(`https://api.akbsproduction.com/logout`);
-
     // Remove cookies and local storage data
     Cookies.remove("jwt");
     localStorage.removeItem("role");
@@ -53,8 +48,6 @@ const handleLogout = async () => {
     }
   } catch (error) {
     console.error("Logout error:", error);
-    
-    // Optionally reset the logged out state in case of an error
     isLoggedOut = false; 
   }
 };

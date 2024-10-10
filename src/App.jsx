@@ -37,6 +37,7 @@ const App = () => {
         <Route path='*' element={<NotFoundPage />} />
         <Route path='/edit-product/:id' element={<EditProduct />} />
         <Route path='/record-sale/:id' element={<RecordSale />} />
+        {/* <Route path='/record-sale' element={<RecordSale />} />use as props */}
         <Route path='/dashboard' element={<Dashboard />}/>
         <Route path='/user-admin' element={<UserAdmin />} />
         <Route path='/login' element={<ValidatedLoginForm />} />
