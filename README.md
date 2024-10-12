@@ -1,6 +1,6 @@
 # React + Vite
 Demo video: <br/>
-<video src='public/Screen-Record.mp4' width=180/>
+<video src='https://github.com/brooktewabe/Inventory-system-React/blob/main/public/Screen-Record.mp4' width=180/>
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
