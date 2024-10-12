@@ -1,6 +1,6 @@
 # React + Vite
 Demo video: <br/>
-[![Watch the video](https://i.sstatic.net/Vp2cE.png)](public/Screen-Record.mp4)</br>
+<video src='public/Screen-Record.mp4' width=180/>
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
