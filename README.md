@@ -1,6 +1,6 @@
 # React + Vite
 Demo video: <br/>
-![Demo](public/inv.jpg)</br>
+![Demo](public/Inv.jpg)</br>
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
