@@ -23,7 +23,7 @@ const IncomeSection = () => {
   // Function to fetch income data based on the selected period
   const fetchIncome = async (period) => {
     try {
-      const response = await axios.get(`https://api.akbsproduction.com/stock/total/total-stock`);
+      const response = await axios.get(`http://localhost:5000/stock/total/total-stock`);
       const data = response.data.totalSum;
       
       setstockVal(data);

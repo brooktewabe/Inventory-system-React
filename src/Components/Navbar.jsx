@@ -37,7 +37,7 @@ const Navbar = () => {
     const fetchInfo = async () => {
       try {
         const response = await axios.get(
-          `https://api.akbsproduction.com/user/${uid}`
+          `http://localhost:5000/user/${uid}`
         );
         setUser(response.data);
       } catch (error) {
@@ -115,7 +115,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`https://api.akbsproduction.com/logout`, {
+      await axios.post(`http://localhost:5000/logout`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

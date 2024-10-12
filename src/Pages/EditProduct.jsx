@@ -47,7 +47,7 @@ const EditProduct = () => {
 
       try {
         const response = await axios.patch(
-          `https://api.akbsproduction.com/stock/${id}`,
+          `http://localhost:5000/stock/${id}`,
           formData,
           {
             headers: {
@@ -56,32 +56,6 @@ const EditProduct = () => {
           }
         );
 
-        // Create movement data
-        const mvtData = new FormData();
-        mvtData.append("User", `${user.fname} ${user.lname}`);
-        mvtData.append("Name", values.Name);
-        mvtData.append("Adjustment", values.Curent_stock - stock.Curent_stock);
-        mvtData.append("Type", "Modification");
-
-        // Post movement data
-        await axios.post("https://api.akbsproduction.com/movement/create", mvtData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        // Create notification data
-        if (values.Curent_stock < values.Reorder_level) {
-        const notifData = new FormData();
-        notifData.append("message", `${stock.Name} is running low on stock.`);
-        notifData.append("priority", "High");
-
-        // Post notification data
-        await axios.post("https://api.akbsproduction.com/notification/create", notifData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      }
         Swal.fire({
           title: "Success!",
           text: "Updated successfully.",
@@ -102,7 +76,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const response = await axios.get(`https://api.akbsproduction.com/stock/${id}`);
+        const response = await axios.get(`http://localhost:5000/stock/${id}`);
         setStock(response.data);
         formik.setValues({
           Name: response.data.Name,
@@ -124,18 +98,6 @@ const EditProduct = () => {
     }
   }, [id, stock]); // Add stock as a dependency
   
-
-  useEffect(() => {
-    const fetchInfo = async () => {
-      try {
-        const response = await axios.get(`https://api.akbsproduction.com/user/${uid}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching details:", error);
-      }
-    };
-    fetchInfo();
-  }, [uid]);
 
   const handleFileChange = (e) => {
     formik.setFieldValue("Product_image", e.currentTarget.files[0]);

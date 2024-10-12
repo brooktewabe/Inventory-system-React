@@ -60,7 +60,7 @@ const UserAdmin = () => {
     }
 
     try {
-      await axios.post("/https://api.akbsproduction.com/signup", {
+      await axios.post("/http://localhost:5000/signup", {
         fname,
         lname,
         email,
@@ -87,7 +87,7 @@ const UserAdmin = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("https://api.akbsproduction.com/users");
+        const response = await axios.get("http://localhost:5000/users");
         if (Array.isArray(response.data)) {
           setUsers(response.data);
           setFilteredUsers(response.data);
@@ -128,7 +128,7 @@ const UserAdmin = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`https://api.akbsproduction.com/user/${id}`);
+          await axios.delete(`http://localhost:5000/user/${id}`);
           setUsers(users.filter((user) => user.id !== id));
           toast.success("Deleted Successfully");
         } catch (error) {

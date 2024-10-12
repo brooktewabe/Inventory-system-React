@@ -29,7 +29,7 @@ const RecordSale = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const response = await axios.get(`https://api.akbsproduction.com/stock/${id}`);
+        const response = await axios.get(`http://localhost:5000/stock/${id}`);
         setSale(response.data);
       } catch (error) {
         console.error("Error fetching:", error);
@@ -118,12 +118,12 @@ const RecordSale = () => {
   
     try {
       // First, record the sale
-      await axios.post("https://api.akbsproduction.com/sales/create", formData, {
+      await axios.post("http://localhost:5000/sales/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
       // Then, update the stock
-      await axios.patch(`https://api.akbsproduction.com/stock/${id}`, patchData);
+      await axios.patch(`http://localhost:5000/stock/${id}`, patchData);
   
       // Check if new quantity is less than reorder level
       if (newQuantity < sale.Reorder_level) {
@@ -132,7 +132,7 @@ const RecordSale = () => {
           priority: "High",
         };
         // Send the notification
-        await axios.post("https://api.akbsproduction.com/notification/create", notifData, {
+        await axios.post("http://localhost:5000/notification/create", notifData, {
           headers: { "Content-Type": "application/json" },
         });
       }

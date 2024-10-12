@@ -9,7 +9,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        const response = await axios.get(`https://api.akbsproduction.com/stock/all`);
+        const response = await axios.get(`http://localhost:5000/stock/all`);
         setStocks(response.data.data); 
         console.log(stocks)
       } catch (error) {

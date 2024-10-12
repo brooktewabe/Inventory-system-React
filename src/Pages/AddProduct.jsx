@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "../axiosInterceptor";
 import withAuth from "../withAuth";
-import { GoImage } from "react-icons/go";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -21,7 +20,7 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchInfo = async () => {
       try {
-        const response = await axios.get(`https://api.akbsproduction.com/user/${uid}`);
+        const response = await axios.get(`http://localhost:5000/user/${uid}`);
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -57,25 +56,9 @@ const AddProduct = () => {
     formData.append("files", Product_image);
 
     try {
-      // Create the product
-      const productResponse = await axios.post("https://api.akbsproduction.com/stock/create", formData, {
+       await axios.post("http://localhost:5000/stock/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        },
-      });
-
-      // Create movement data
-      const mvtData = {
-        User: `${user.fname} ${user.lname}`,
-        Name: values.Name,
-        Adjustment: values.Curent_stock,
-        Type: "Addition",
-      };
-
-      // Post movement data
-      const movementResponse = await axios.post("https://api.akbsproduction.com/movement/create", mvtData, {
-        headers: {
-          "Content-Type": "application/json",
         },
       });
 
