@@ -1,7 +1,9 @@
 # React + Vite
-Demo video: <br/>
-<video src='' width=180/>
-[![Watch the video](https://github.com/brooktewabe/Inventory-system-React/blob/main/public/Screen-Record.mp4)</br>
+Demo screenshots: <br/>
+![Demo](public/dashboard.png)
+![Demo](public/add-sales.png)
+![Demo](public/inventory.png)
+![Demo](public/movement.png)
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
