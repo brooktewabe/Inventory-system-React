@@ -7,9 +7,9 @@ import { GoImage } from "react-icons/go";
 import { toast, ToastContainer } from "react-toastify";
 
 const RecordSale = () => {
-  // const location = useLocation();
-  // const { id } = location.state || {}; // Extract id from state (props)
-  const { id } = useParams();
+  const location = useLocation();
+  const { id } = location.state || {}; // Extract id from state (props)
+  // const { id } = useParams();
   const navigate = useNavigate();
   const [sale, setSale] = useState(null);
   const [formData, setFormData] = useState({
@@ -25,7 +25,7 @@ const RecordSale = () => {
     Receipt: "",
     Transaction_id: "",
   });
-
+console.log(id)
   useEffect(() => {
     const fetchStock = async () => {
       try {

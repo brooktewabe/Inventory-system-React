@@ -56,12 +56,12 @@ const Sales = () => {
     if (id.length <= 10) return id; // Return the id if it's less than or equal to 10 characters
     return `${id.slice(0, 3)}...${id.slice(-5)}`; // Format as 'xxxxx...xxxxx'
   };
-  const onEditStock = (id) => {
-    navigate(`/record-sale/${id}`);
-  };
   // const onEditStock = (id) => {
-  //   navigate('/record-sale', { state: { id } }); // Pass the product id via state/props
+  //   navigate(`/record-sale/${id}`);
   // };
+  const onEditStock = (id) => {
+    navigate('/record-sale', { state: { id } }); // Pass the product id via state/props
+  };
   const handleAddNavigation = () => {
     navigate("/sales-history");
   };
