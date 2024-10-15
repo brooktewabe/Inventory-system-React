@@ -4,6 +4,26 @@ import Cookies from 'js-cookie';
 // Flag to prevent further requests after logout
 let isLoggedOut = false;
 
+// Function to refresh access token
+const refreshAccessToken = async () => {
+  try {
+    const refreshToken = Cookies.get('refreshToken');
+    const response = await axios.post(`http://localhost:5000/refresh-token`, { refreshToken });
+    const newAccessToken = response.data.accessToken;
+    
+    // Set the new access token as a cookie
+    Cookies.set('jwt', newAccessToken);
+    
+    // Update the header for the next request
+    axios.defaults.headers['Authorization'] = `Bearer ${newAccessToken}`;
+    
+    return newAccessToken;
+  } catch (error) {
+    console.error("Failed to refresh access token:", error);
+    await handleLogout(); // Handle logout if refresh token fails
+  }
+};
+
 // Request interceptor to add JWT token to headers
 axios.interceptors.request.use(
   (config) => {
@@ -27,7 +47,13 @@ axios.interceptors.response.use(
   async (error) => {
     if (error.response && error.response.status === 401 && !isLoggedOut) {
       isLoggedOut = true; // Prevent further requests
-      await handleLogout();
+
+      // Try to refresh the access token
+      const newAccessToken = await refreshAccessToken();
+      if (newAccessToken) {
+        isLoggedOut = false; // Reset logout flag after refreshing
+        return axios(error.config); // Retry the original request
+      }
     }
     return Promise.reject(error);
   }
@@ -39,6 +65,7 @@ const handleLogout = async () => {
     await axios.post(`http://localhost:5000/logout`);
     // Remove cookies and local storage data
     Cookies.remove("jwt");
+    Cookies.remove("refreshToken"); // Make sure to remove refresh token
     localStorage.removeItem("role");
     localStorage.removeItem("uid");
 

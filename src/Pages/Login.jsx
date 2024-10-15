@@ -28,7 +28,8 @@ const ValidatedLoginForm = () => {
         password,
       });
 
-      Cookies.set("jwt", response.data.jwt, { expires: 1 });
+      Cookies.set("jwt", response.data.accessToken);
+      Cookies.set("refreshToken", response.data.refreshToken); // Refresh token in cookies (7 days expiry)
       // Cookies.set("userId", response.data.profileId, { expires: 1 });
       localStorage.setItem("role", response.data.role);
       localStorage.setItem("uid", response.data.id);
@@ -42,6 +43,7 @@ const ValidatedLoginForm = () => {
       toast.error("Invalid email or password");
     }
   };
+  
   const validateForm = () => {
     const schema = Yup.object().shape({
       email: Yup.string()

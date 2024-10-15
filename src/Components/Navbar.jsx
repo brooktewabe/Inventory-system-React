@@ -121,6 +121,7 @@ const Navbar = () => {
       });
       // Cookies.remove("userId");
       Cookies.remove("jwt");
+      Cookies.remove("refreshToken");
       localStorage.removeItem("role");
       localStorage.removeItem("uid");
       navigate("/login", { replace: true });
