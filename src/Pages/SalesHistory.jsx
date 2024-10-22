@@ -163,18 +163,10 @@ const SalesHistory = () => {
                     <td className="py-2 px-4 border-b">
                       {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
-                    <td className="py-2 px-4 border-b relative group">
-                      {formatProductId(sale.Product_id)}
-                      <span className="absolute hidden group-hover:flex bg-gray-700 text-white text-sm rounded  z-10 left-1/2 transform -translate-x-1/2 mt-1">
-                        {sale.Product_id}
-                      </span>
-                    </td>
-
+                    <td className="py-2 px-4 border-b">{sale.Product?.id.slice(0, 5)}...{sale.Product?.id.slice(-5) }</td>
                     <td className="py-2 px-4 border-b">{sale.Full_name}</td>
                     <td className="py-2 px-4 border-b">{sale.Amount}</td>
-                    <td className="py-2 px-4 border-b">
-                      {sale.Payment_method}
-                    </td>
+                    <td className="py-2 px-4 border-b">{sale.Payment_method}</td>
                     <td className="py-2 px-4 border-b">{sale.Credit}</td>
                     <td className="py-2 px-4 border-b">{sale.Contact}</td>
                     <td className="py-3 px-4 border-b space-x-2">

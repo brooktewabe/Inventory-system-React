@@ -25,7 +25,7 @@ const RecordSale = () => {
     Receipt: "",
     Transaction_id: "",
   });
-console.log(id)
+// console.log(id)
   useEffect(() => {
     const fetchStock = async () => {
       try {
